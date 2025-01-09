@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/app/utils/supabase/client";
 
 // Initialize Supabase client
@@ -9,6 +10,8 @@ const supabase = createClient();
 const DIVISIONS = ['SOFTWARE', 'HARDWARE', 'FNS', 'TND', 'CMB', 'HR', 'PM'] as const;
 
 const FormSubmissionWithUpload: React.FC = () => {
+    const router = useRouter();
+
     const [formData, setFormData] = useState({
         user_id: "",
         name: "",
@@ -20,19 +23,20 @@ const FormSubmissionWithUpload: React.FC = () => {
     const [uploadStatus, setUploadStatus] = useState<string>("");
 
     useEffect(() => {
-        // Get current user session
         const fetchUser = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session?.user) {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error || !user) {
+                router.replace('/login'); // Redirect to login page
+            } else {
                 setFormData((prevData) => ({
                     ...prevData,
-                    user_id: session.user.id, // Set user ID
+                    user_id: user.id, // Set user ID
                 }));
             }
         };
 
         fetchUser();
-    }, []);
+    }, [router]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -41,7 +45,16 @@ const FormSubmissionWithUpload: React.FC = () => {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            setFile(event.target.files[0]);
+            const selectedFile = event.target.files[0];
+
+            if (selectedFile.type !== "application/pdf") {
+                setUploadStatus("Only PDF files are allowed.");
+                setFile(null);
+                return;
+            }
+
+            setFile(selectedFile);
+            setUploadStatus("");
         }
     };
 
@@ -53,7 +66,7 @@ const FormSubmissionWithUpload: React.FC = () => {
             return;
         }
 
-        const filePath = `uploads/${file.name}`;
+        const filePath = `uploads/${Date.now()}_${file.name}`; // Ensure unique filenames
         setUploadStatus("Uploading file...");
 
         try {
@@ -67,13 +80,13 @@ const FormSubmissionWithUpload: React.FC = () => {
                 return;
             }
 
-            const filePathURL = fileData.fullPath;
-            console.log("File uploaded to:", filePathURL);
+            const fileURL = `https://auegaftnrlbvwqzoatug.supabase.co/storage/v1/object/public/${fileData.path}`;
+            console.log("File uploaded to:", fileURL);
 
             // Insert form data into Supabase table
             const { error: insertError } = await supabase.from("form_submission").insert({
                 ...formData,
-                file: filePathURL,
+                file: fileURL,
             });
 
             if (insertError) {
@@ -95,13 +108,13 @@ const FormSubmissionWithUpload: React.FC = () => {
             >
                 <h1 className="text-xl font-bold">Open Recruitment Form</h1>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Name</label>
+                    <label className="block text-sm font-medium text-blue-700">Name</label>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
                         required
                     />
                 </div>
@@ -112,7 +125,7 @@ const FormSubmissionWithUpload: React.FC = () => {
                         name="major"
                         value={formData.major}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
                         required
                     />
                 </div>
@@ -122,7 +135,7 @@ const FormSubmissionWithUpload: React.FC = () => {
                         name="first_choice"
                         value={formData.first_choice}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
                         required
                     >
                         {DIVISIONS.map((division) => (
@@ -138,7 +151,7 @@ const FormSubmissionWithUpload: React.FC = () => {
                         name="second_choice"
                         value={formData.second_choice}
                         onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
                         required
                     >
                         {DIVISIONS.map((division) => (
@@ -149,11 +162,11 @@ const FormSubmissionWithUpload: React.FC = () => {
                     </select>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Upload File</label>
+                    <label className="block text-sm font-medium text-gray-700">Upload Tubid 1</label>
                     <input
                         type="file"
                         onChange={handleFileChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                        className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
                         required
                     />
                 </div>
