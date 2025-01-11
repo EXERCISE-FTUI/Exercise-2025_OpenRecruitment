@@ -6,13 +6,16 @@ import { supabase } from "../utils/supabase/supabase";
 
 const Page = () => {
     const [registerData, setRegisterData] = useState({ email: "", password: "" });
+    const [step, setStep] = useState(1);
+
     async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault(); // Prevent form submission
         const response = await supabase.auth.signUp({
           email: registerData.email,
           password: registerData.password,
           options: {
-            emailRedirectTo: "https://localhost:3000/login",
+            emailRedirectTo: "http://localhost:3000/login",
+
           },
         });
     
@@ -20,11 +23,13 @@ const Page = () => {
           console.error(response.error.message);
           alert("Registration failed: " + response.error.message);
         } else {
-          alert("Registration successful! Please check your email.");
+          setStep(2);
         }
       }
   return (
     <div className='h-screen flex flex-col justify-center items-center'>
+        { step === 1  ?(
+            <>
         <form
         onSubmit={handleRegister}
         className="mt-4 text-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
@@ -73,6 +78,12 @@ const Page = () => {
           Sign up
         </button>
       </form>
+      </>
+        ) : (
+            <div>
+                <h1 className="text-4xl">Check your email for a verification link</h1>
+            </div>
+        )}
     </div>
   )
 }

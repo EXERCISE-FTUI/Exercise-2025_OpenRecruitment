@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "../utils/supabase/supabase";
-import Link from "next/link";
+
 
 export default function LoginPage() {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -26,7 +26,7 @@ export default function LoginPage() {
   
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen text-black">
       {/* Login Form */}
       <form
         onSubmit={handleLogin}
@@ -49,7 +49,7 @@ export default function LoginPage() {
             required
             value={loginData.email}
             onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="mb-6">
@@ -66,7 +66,7 @@ export default function LoginPage() {
             required
             value={loginData.password}
             onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <button
