@@ -10,7 +10,7 @@ const sliderCompany = () => {
   const images = [...aImages, ...aImages];
 
   return (
-    <div className="w-screen overflow-hidden flex flex-col gap-10">
+    <div className="w-screen overflow-hidden flex flex-col gap-10 my-12">
       <div className="text-center">
         <span className="text-blue_3 text-[56px] font-normal font-['Inter']">
           Company{" "}
@@ -19,12 +19,12 @@ const sliderCompany = () => {
           Alumni
         </span>
       </div>
-      <div className="relative flex items-center">
+      <div className="relative flex slider-company-gradient items-center ">
         <motion.div
-          initial={{ x: 0 }}
-          animate={{ x: "-100%" }}
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
           transition={{
-            duration: 75,
+            duration: 90,
             repeat: Infinity,
             repeatType: "loop",
             ease: "linear",
@@ -42,10 +42,10 @@ const sliderCompany = () => {
           ))}
         </motion.div>
         <motion.div
-          initial={{ x: 0 }}
-          animate={{ x: "-100%" }}
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
           transition={{
-            duration: 75,
+            duration: 90,
             repeat: Infinity,
             repeatType: "loop",
             ease: "linear",

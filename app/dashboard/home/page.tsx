@@ -6,7 +6,8 @@ import opregHeader from "@/images/opregHeader.svg";
 import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { useState } from "react";
-
+import CarouselLastYear from "@/components/carouselLastyear/Page";
+import CardProject from "@/components/cardProject/Page";
 const HomePage = () => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -38,6 +39,8 @@ const HomePage = () => {
         <Image src={opregHeader} alt="header" className="w-full pt-10" />
       </div>
       <CountdownTimer />
+      <CarouselLastYear/>
+      <CardProject/>
       <SliderCompany />
     </div>
   );

@@ -12,11 +12,13 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.10",
     "axios": "^1.7.9",
+    "embla-carousel-react": "^8.5.2",
     "firebase": "^11.1.0",
     "framer-motion": "^11.17.0",
     "next": "15.1.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "swiper": "^11.2.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
