@@ -1,12 +1,11 @@
-'use client';
+"use client";
 
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { supabase } from "@/app/utils/supabase/supabase";
+import CountdownTimer from "@/components/countdownTimer/page";
+import SliderCompany from "@/components/sliderCompany/page";
+import opregHeader from "@/images/opregHeader.svg";
 import { User } from "@supabase/supabase-js";
-import opregHeader from '@/images/opregHeader.svg';
 import Image from "next/image";
-import CountdownTimer from "@/components/countdownTimer/page"
+import { useState } from "react";
 
 const HomePage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -39,6 +38,7 @@ const HomePage = () => {
         <Image src={opregHeader} alt="header" className="w-full pt-10" />
       </div>
       <CountdownTimer />
+      <SliderCompany />
     </div>
   );
 };
