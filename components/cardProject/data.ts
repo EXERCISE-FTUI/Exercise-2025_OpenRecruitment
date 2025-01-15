@@ -1,9 +1,9 @@
-import img1 from "@/images/lastyear/img1.jpg";
-import img2 from "@/images/lastyear/img2.jpg";
-import img3 from "@/images/lastyear/img3.jpg";
-import img4 from "@/images/lastyear/img1.jpg";
-import img5 from "@/images/lastyear/img1.jpg";
-import img6 from "@/images/lastyear/img1.jpg";
+import img1 from "@/images/pastproject/img1.png";
+import img2 from "@/images/pastproject/img2.png";
+import img3 from "@/images/pastproject/img3.png";
+import img4 from "@/images/pastproject/img4.png";
+import img5 from "@/images/pastproject/img5.png";
+// import img6 from "@/images/pastproject/img1.png";
 
 export const projectData = {
     "project1": {
@@ -31,9 +31,9 @@ export const projectData = {
         description: "This project aims to develop a user-friendly pocket sized IoT module for real-time monitoring of cryptocurrency and stock market prices, displayed on an OLED screen with a refresh rate of up to three minutes.",
         img: img5
     },
-    "project6": {
-        title: "E-Commerce Product Web Scraping",
-        description: "Built a desktop GUI application using the Python programming language to create a web scraping system based on Selenium.",
-        img: img6
-    },
+    // "project6": {
+    //     title: "E-Commerce Product Web Scraping",
+    //     description: "Built a desktop GUI application using the Python programming language to create a web scraping system based on Selenium.",
+    //     img: img6
+    // },
 }

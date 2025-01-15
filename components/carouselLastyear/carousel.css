@@ -1,9 +1,11 @@
 .embla {
-  max-width: 52rem;
+  max-width: 68rem;
+  /* 60 */
   margin: auto;
   --slide-height: 28px;
-  --slide-spacing: 32px;
+  --slide-spacing: 0rem;
   --slide-size: 56%;
+  /* 56 */
 }
 .embla__viewport {
   overflow: hidden;
@@ -25,11 +27,4 @@
   height: var(--slide-height);
   width: 100%;
   object-fit: cover;
-}
-.embla__controls {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  justify-content: space-between;
-  gap: 1.2rem;
-  margin-top: 1.8rem;
 }

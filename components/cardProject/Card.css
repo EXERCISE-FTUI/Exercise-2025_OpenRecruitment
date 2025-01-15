@@ -1,6 +1,6 @@
 .swiper {
-  width: 400px;
-  height: 510px;
+  width: 420px;
+  height: 480px;
 }
 
 .swiper-slide {
@@ -14,7 +14,7 @@
 }
 
 .swiper-slide:nth-child(1n) {
-  background-color: #15394A;
+  background-color: #15394a;
 }
 
 .swiper-slide:nth-child(2n) {
@@ -26,7 +26,7 @@
 }
 
 .swiper-slide:nth-child(4n) {
-  background-color: #15394A;
+  background-color: #15394a;
 }
 
 .swiper-slide:nth-child(5n) {
