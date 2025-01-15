@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const Navbar = () => {
   return (
-    <div className='fixed w-screen flex justify-center items-center p-5'>
+    <div className='fixed top-0 w-screen flex justify-center items-center p-5'>
     <div className='bg-gradient-to-r from-purple_5 to-purple_2 px-2 py-3 flex justify-between rounded-md backdrop-blur-md shadow-lg z-10 w-full items-center'>
         <div className='w-[40%]'>
             <Image src={logoExerLight} alt='logo' className='w-24 h-8 ml-12'/>
