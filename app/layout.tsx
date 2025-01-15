@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white_2`}>
+      <body className={`${inter.className} bg-white_2 overflow-x-hidden`}>
         <Navbar />
         {children}
         <Toaster />
