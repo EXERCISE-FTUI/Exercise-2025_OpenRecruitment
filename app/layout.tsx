@@ -2,8 +2,9 @@ import Footer from "@/components/footer/page";
 import "./globals.css";
 import Navbar from "@/components/navbar/page";
 import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({ weight: '300' });
+const inter = Inter({ weight: "300" });
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#fafafa]`}>
         <Navbar />
         {children}
+        <Toaster />
         <Footer />
       </body>
     </html>

@@ -1,33 +1,77 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: [
+    darkMode: ["class"],
+    content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        white_1:"#FAFAFA",
-        white_2:"#F5F5F5",
-        gray_1:"#D9D9D9",
-        gray_2:"#BFC8CE",
-        gray_3:"#889DA8",
-        blue_1:"#2B7696",
-        blue_2:"#1C465C",
-        blue_3:"#15394A",
-        blue_4:"#0D2734",
-        purple_1:"#E2E0E8",
-        purple_2:"#9D98B3",
-        purple_3:"#645B87",
-        purple_4:"#55457E",
-        purple_5:"#383F96",
-        green_yellow:"#D9E05A",
-      },
-    },
+  	extend: {
+  		colors: {
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
+  			white_1: '#FAFAFA',
+  			white_2: '#F5F5F5',
+  			gray_1: '#D9D9D9',
+  			gray_2: '#BFC8CE',
+  			gray_3: '#889DA8',
+  			blue_1: '#2B7696',
+  			blue_2: '#1C465C',
+  			blue_3: '#15394A',
+  			blue_4: '#0D2734',
+  			purple_1: '#E2E0E8',
+  			purple_2: '#9D98B3',
+  			purple_3: '#645B87',
+  			purple_4: '#55457E',
+  			purple_5: '#383F96',
+  			green_yellow: '#D9E05A',
+  			card: {
+  				DEFAULT: 'hsl(var(--card))',
+  				foreground: 'hsl(var(--card-foreground))'
+  			},
+  			popover: {
+  				DEFAULT: 'hsl(var(--popover))',
+  				foreground: 'hsl(var(--popover-foreground))'
+  			},
+  			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			secondary: {
+  				DEFAULT: 'hsl(var(--secondary))',
+  				foreground: 'hsl(var(--secondary-foreground))'
+  			},
+  			muted: {
+  				DEFAULT: 'hsl(var(--muted))',
+  				foreground: 'hsl(var(--muted-foreground))'
+  			},
+  			accent: {
+  				DEFAULT: 'hsl(var(--accent))',
+  				foreground: 'hsl(var(--accent-foreground))'
+  			},
+  			destructive: {
+  				DEFAULT: 'hsl(var(--destructive))',
+  				foreground: 'hsl(var(--destructive-foreground))'
+  			},
+  			border: 'hsl(var(--border))',
+  			input: 'hsl(var(--input))',
+  			ring: 'hsl(var(--ring))',
+  			chart: {
+  				'1': 'hsl(var(--chart-1))',
+  				'2': 'hsl(var(--chart-2))',
+  				'3': 'hsl(var(--chart-3))',
+  				'4': 'hsl(var(--chart-4))',
+  				'5': 'hsl(var(--chart-5))'
+  			}
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		}
+  	}
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;

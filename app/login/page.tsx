@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 import { supabase } from "../utils/supabase/supabase";
-
+import { LoginForm } from "./_components/LoginForm";
+import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
+  const { toast } = useToast();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
-
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    setLoading(true);
     e.preventDefault(); // Prevent form submission
     const response = await supabase.auth.signInWithPassword({
       email: loginData.email,
@@ -16,76 +20,40 @@ export default function LoginPage() {
     });
 
     if (response.error) {
-      console.error(response.error.message);
-      alert("Email Or Password is incorrect");
+      toast({
+        title: "Login failed",
+        variant: "destructive",
+        description: response.error.message,
+      });
     } else {
-      window.location.href = "/dashboard/home"; // Redirect after successful login
+      toast({
+        title: "Login successful!",
+      });
+      window.location.href = "/dashboard/home";
     }
+    setLoading(false);
   }
 
-  
-
   return (
-    <div className="flex items-center justify-center min-h-screen text-black">
-      {/* Login Form */}
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
-      >
-        <h2 className="text-2xl font-extrabold mb-6 text-center text-black">
-          Login
-        </h2>
-        <div className="mb-4">
-          <label
-            htmlFor="login-email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email:
-          </label>
-          <input
-            id="login-email"
-            name="email"
-            type="email"
-            required
-            value={loginData.email}
-            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-            className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="login-password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password:
-          </label>
-          <input
-            id="login-password"
-            name="password"
-            type="password"
-            required
-            value={loginData.password}
-            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-            className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Log in
-        </button>
-	
-		<button
-			onClick={() => window.location.href = "/register"}
-		  className="mt-3 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Sign Up For an Account
-        </button>
-      </form>
-
-      {/* Register Form */}
-      
+    <div className="flex flex-col justify-center items-center min-h-screen">
+      <h1 className="hidden md:flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+        Login
+      </h1>
+      <div className="flex w-full items-center justify-evenly">
+        <LoginForm
+          handleLogin={handleLogin}
+          setLoginData={setLoginData}
+          loginData={loginData}
+          loading={loading}
+        />
+        <Image
+          src="/Graphic.svg"
+          alt="logo"
+          width={600}
+          height={600}
+          className="hidden md:flex"
+        />
+      </div>
     </div>
   );
 }
