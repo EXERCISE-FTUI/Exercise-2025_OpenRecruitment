@@ -4,7 +4,6 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SubmitHandler, useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -20,6 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Control, SubmitHandler, useForm } from "react-hook-form";
+import DocumentTab from "./document-tab";
 
 const departments = [
   { value: "dte", label: "DTE" },
@@ -28,20 +29,30 @@ const departments = [
 
 const majors = [
   { value: "teknik-elektro", label: "Teknik Elektro" },
+  { value: "teknik-komputer", label: "Teknik Komputer" },
+  { value: "teknik-biomedik", label: "Teknik Biomedik" },
   { value: "other", label: "Other" },
 ];
 
 const forces = [
   { value: "2024", label: "2024" },
   { value: "2023", label: "2023" },
+  { value: "2022", label: "2022" },
+  { value: "other", label: "Other" },
 ];
 
 const divisions = [
   { value: "software", label: "Software" },
   { value: "hardware", label: "Hardware" },
+  { value: "finance_and_secretary", label: "Finance and Secretary" },
+  { value: "training_and_development", label: "Training and Development" },
+  { value: "creative_marketing", label: "Creative Marketing" },
+  { value: "human_resources", label: "Human Resources" },
+  { value: "project_manager", label: "Project Manager" },
 ];
 
 interface FormData {
+  user_id: string;
   fullName: string;
   npm: string;
   department: string;
@@ -55,39 +66,37 @@ interface FormData {
   division2: string;
 }
 
-export default function RegistrationForm({}) {
+interface RegistrationFormProps {
+  form: ReturnType<typeof useForm<FormData>>;
+  onSubmit: SubmitHandler<FormData>;
+  handleSubmit: (callback: (data: FormData) => void) => () => void;
+  handleFileUpload: (file: File | null, type: string) => void;
+  control: Control<FormData>;
+}
+
+export default function RegistrationForm({
+  form,
+  onSubmit,
+  handleSubmit,
+  control,
+  handleFileUpload,
+}: RegistrationFormProps) {
   const [activeTab, setActiveTab] = React.useState("personal");
-  const form = useForm<FormData>({
-    defaultValues: {
-      fullName: "",
-      npm: "",
-      department: "",
-      major: "",
-      force: "",
-      email: "",
-      phone: "",
-      idLine: "",
-      otherContacts: "",
-      division1: "",
-      division2: "",
-    },
-  });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    setActiveTab("document");
-  };
-
-  const handleTabChange = (value: string) => {
+  const handleTabChange = async (value: string) => {
     if (value === "document") {
-      form.handleSubmit(onSubmit)();
+      const isValid = await form.trigger();
+      if (isValid) {
+        setActiveTab(value);
+        handleSubmit(onSubmit)();
+      }
       return;
     }
     setActiveTab(value);
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-4 space-y-6">
+    <div className="w-full max-w-3xl mx-auto p-4 space-y-6">
       <Tabs
         value={activeTab}
         onValueChange={handleTabChange}
@@ -109,10 +118,10 @@ export default function RegistrationForm({}) {
         </TabsList>
         <TabsContent value="personal" className="space-y-6 mt-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="fullName"
                   rules={{ required: "Full name is required" }}
                   render={({ field }) => (
@@ -127,7 +136,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="npm"
                   rules={{ required: "NPM is required" }}
                   render={({ field }) => (
@@ -147,7 +156,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="department"
                   rules={{ required: "Department is required" }}
                   render={({ field }) => (
@@ -155,7 +164,7 @@ export default function RegistrationForm({}) {
                       <FormLabel>Department</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -179,7 +188,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="major"
                   rules={{ required: "Major is required" }}
                   render={({ field }) => (
@@ -187,7 +196,7 @@ export default function RegistrationForm({}) {
                       <FormLabel>Major</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -208,7 +217,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="force"
                   rules={{ required: "Force is required" }}
                   render={({ field }) => (
@@ -216,7 +225,7 @@ export default function RegistrationForm({}) {
                       <FormLabel>Force</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -237,7 +246,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="email"
                   rules={{
                     required: "Email is required",
@@ -262,7 +271,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="phone"
                   rules={{
                     required: "Phone number is required",
@@ -289,7 +298,7 @@ export default function RegistrationForm({}) {
                 />
 
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="idLine"
                   rules={{ required: "ID Line is required" }}
                   render={({ field }) => (
@@ -305,7 +314,7 @@ export default function RegistrationForm({}) {
               </div>
 
               <FormField
-                control={form.control}
+                control={control}
                 name="otherContacts"
                 rules={{ required: "Other contact is required" }}
                 render={({ field }) => (
@@ -347,7 +356,7 @@ export default function RegistrationForm({}) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
-                    control={form.control}
+                    control={control}
                     name="division1"
                     rules={{ required: "Division 1 is required" }}
                     render={({ field }) => (
@@ -355,7 +364,7 @@ export default function RegistrationForm({}) {
                         <FormLabel>Division (Option 1)</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -379,7 +388,7 @@ export default function RegistrationForm({}) {
                   />
 
                   <FormField
-                    control={form.control}
+                    control={control}
                     name="division2"
                     rules={{ required: "Division 2 is required" }}
                     render={({ field }) => (
@@ -387,7 +396,7 @@ export default function RegistrationForm({}) {
                         <FormLabel>Division (Option 2)</FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -414,6 +423,7 @@ export default function RegistrationForm({}) {
 
               <div className="flex justify-center w-full md:w-auto md:justify-end space-x-4">
                 <Button
+                  onClick={() => handleTabChange("personal")}
                   type="button"
                   variant="outline"
                   className="text-blue_3 w-full md:max-w-40"
@@ -432,11 +442,10 @@ export default function RegistrationForm({}) {
           </Form>
         </TabsContent>
         <TabsContent value="document">
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">
-              Document section content goes here
-            </p>
-          </div>
+          <DocumentTab
+            handleFileUpload={handleFileUpload}
+            handleTabChange={handleTabChange}
+          />
         </TabsContent>
       </Tabs>
     </div>

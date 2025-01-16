@@ -35,11 +35,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
-      <h1 className="hidden md:flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+    <div className="flex flex-col justify-center items-center min-h-screen my-20">
+      <h1 className=" flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
         Login
       </h1>
-      <div className="flex w-full items-center justify-evenly">
+      <div className="flex mt-5 md:mt-0 w-full items-center justify-center md:justify-evenly">
         <LoginForm
           handleLogin={handleLogin}
           setLoginData={setLoginData}

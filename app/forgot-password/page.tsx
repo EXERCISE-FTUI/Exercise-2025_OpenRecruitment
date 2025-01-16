@@ -37,7 +37,7 @@ export default function LoginPage() {
 
   return (
     <div className="mt-10 flex flex-col items-center min-h-screen">
-      <h1 className=" text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+      <h1 className="mt-36 text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
         Password Reset
       </h1>
       <div className="flex w-full h-screen items-center -translate-y-40 justify-center">

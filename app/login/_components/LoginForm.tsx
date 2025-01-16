@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { Loader } from "lucide-react";
+import { signInWithGoogle } from "@/utils/action";
 
 interface LoginFormProps {
   handleLogin: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -80,6 +81,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           >
             {loading ? <Loader className="animate-spin" /> : "Login"}
           </Button>
+        </form>
+        <div className="space-y-4 mt-4">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200" />
@@ -91,7 +94,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <Button
             variant="outline"
             className="w-full relative flex text-center"
-            onClick={() => {}}
+            onClick={signInWithGoogle}
           >
             <Image
               src="/google.svg"
@@ -111,7 +114,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               Register
             </Link>
           </div>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );

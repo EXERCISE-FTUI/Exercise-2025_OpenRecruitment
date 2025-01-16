@@ -48,13 +48,13 @@ const Page = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen">
+    <div className="flex flex-col justify-center items-center min-h-screen my-20">
       {step === 1 ? (
         <>
-          <h1 className="hidden md:flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+          <h1 className="md:flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
             Register
           </h1>
-          <div className="flex w-full items-center justify-evenly">
+          <div className="flex  mt-5 md:mt-0 w-full items-center justify-center md:justify-evenly">
             <RegisterForm
               handleRegister={handleRegister}
               setRegisterData={setRegisterData}

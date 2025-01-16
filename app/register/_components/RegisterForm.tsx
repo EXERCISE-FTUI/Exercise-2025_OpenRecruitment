@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
+import { signInWithGoogle } from "@/utils/action";
 
 interface LoginFormProps {
   handleRegister: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -84,12 +85,8 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
               onChange={(e) => setconfirmPassword(e.target.value)}
             />
           </div>
-          <Button
-            type="submit"
-            className="w-full bg-[#584890] hover:bg-[#4a3d7a]"
-          >
-            SignUp
-          </Button>
+        </form>
+        <div className="space-y-4 mt-4">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200" />
@@ -101,7 +98,7 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
           <Button
             variant="outline"
             className="w-full relative flex text-center"
-            onClick={() => {}}
+            onClick={signInWithGoogle}
           >
             <Image
               src="/google.svg"
@@ -118,10 +115,10 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
               href="/login"
               className="font-semibold text-black hover:text-[#4a3d7a]"
             >
-              Login
+              Register
             </Link>
           </div>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );
