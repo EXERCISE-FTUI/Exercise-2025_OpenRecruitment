@@ -43,38 +43,38 @@ const CountdownTimer: React.FC = () => {
       {/* Main container with relative positioning */}
       <div className="relative h-60 flex flex-col items-center">
         {/* Countdown Timer Section - Always at top */}
-        <div className="flex justify-center items-center gap-6 z-10 w-full mb-4">
+        <div className="flex justify-center items-center gap-6 z-10 w-full mb-4 max-md:gap-1">
           {/* Days */}
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 max-md:gap-1">
             <div className="text-center text-teal-900 text-lg font-medium">
               Days
             </div>
-            <div className="w-24 h-24 bg-teal-900 rounded-md flex items-center justify-center">
-              <span className="text-white text-5xl font-normal">
+            <div className="w-24 h-24 bg-teal-900 rounded-md flex items-center justify-center max-md:size-20">
+              <span className="text-white text-5xl max-md:text-4xl font-normal">
                 {timeLeft.days}
               </span>
             </div>
           </div>
-          <span className="text-purple_4 text-5xl">:</span>
+          <span className="text-purple_4 text-5xl max-md:text-4xl">:</span>
           {/* Hours */}
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 max-md:gap-1">
             <div className="text-center text-teal-900 text-lg font-medium">
               Hours
             </div>
-            <div className="w-24 h-24 bg-teal-900 rounded-md flex items-center justify-center">
-              <span className="text-white text-5xl font-normal">
+            <div className="w-24 h-24 bg-teal-900 rounded-md flex items-center justify-center max-md:size-20">
+              <span className="text-white text-5xl max-md:text-4xl font-normal">
                 {timeLeft.hours}
               </span>
             </div>
           </div>
-          <span className="text-purple_4 text-5xl">:</span>
+          <span className="text-purple_4 text-5xl max-md:text-4xl">:</span>
           {/* Minutes */}
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 max-md:gap-1">
             <div className="text-center text-teal-900 text-lg font-medium">
               Minutes
             </div>
-            <div className="w-24 h-24 bg-teal-900 rounded-md flex items-center justify-center">
-              <span className="text-white text-5xl font-normal">
+            <div className="w-24 h-24 bg-teal-900 rounded-md flex items-center justify-center max-md:size-20">
+              <span className="text-white text-5xl max-md:text-4xl font-normal">
                 {timeLeft.minutes}
               </span>
             </div>

@@ -7,6 +7,10 @@ import { User } from "@supabase/supabase-js";
 import opregHeader from '@/images/opregHeader.svg';
 import Image from "next/image";
 import CountdownTimer from "@/components/countdownTimer/page"
+import DefineExer from "./defineExer";
+import OurVision from "./ourVision";
+import OurMission from "./ourMission";
+import OurValues from "./ourValues";
 
 const HomePage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -39,6 +43,10 @@ const HomePage = () => {
         <Image src={opregHeader} alt="header" className="w-full pt-10" />
       </div>
       <CountdownTimer />
+      <DefineExer />
+      <OurVision />
+      <OurMission />
+      <OurValues />
     </div>
   );
 };
