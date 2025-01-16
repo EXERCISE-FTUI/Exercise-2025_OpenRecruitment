@@ -96,6 +96,7 @@ const Carousel: React.FC<PropType> = (props) => {
                 alt={`alm${index + 1}`}
                 width={480}
                 objectFit="cover"
+                className="rounded-md"
               />
             </div>
           ))}
