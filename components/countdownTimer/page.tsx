@@ -103,10 +103,12 @@ const CountdownTimer: React.FC = () => {
 
           {/* Booklet Button */}
           <div className="flex items-center gap-3 px-16 py-2 rounded-xl border-2 border-blue-900 bg-transparent shadow-lg">
-            <Image src={booklet} alt="booklet" className="w-7 h-7" />
+            <button className="hover:bg-purple_2" onClick={() => window.open("https://drive.google.com/")}>
+            <Image src={booklet} alt="booklet" className="w-7 h-7"  />
             <div className="text-center text-blue-900 text-xl font-bold">
               Booklet
             </div>
+            </button>
           </div>
         </div>
       </div>
