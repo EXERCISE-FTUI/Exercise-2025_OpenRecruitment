@@ -376,6 +376,13 @@ export default function RegistrationForm({
                               <SelectItem
                                 key={division.value}
                                 value={division.value}
+                                disabled={
+                                  (division.value === "software" ||
+                                    division.value === "hardware") &&
+                                  ["software", "hardware"].includes(
+                                    form.watch("division2")
+                                  )
+                                }
                               >
                                 {division.label}
                               </SelectItem>
@@ -408,6 +415,13 @@ export default function RegistrationForm({
                               <SelectItem
                                 key={division.value}
                                 value={division.value}
+                                disabled={
+                                  (division.value === "software" ||
+                                    division.value === "hardware") &&
+                                  ["software", "hardware"].includes(
+                                    form.watch("division1")
+                                  )
+                                }
                               >
                                 {division.label}
                               </SelectItem>
