@@ -209,7 +209,7 @@ const FormSubmissionWithUpload: React.FC = () => {
   return (
     <>
       {isLoading === true && (
-        <div className="z-30 top-0 fixed bg-black bg-opacity-25 w-screen bg-opacity-20 flex justify-center items-center h-screen">
+        <div className="z-30 top-0 fixed bg-black  w-screen bg-opacity-20 flex justify-center items-center h-screen">
           <Loader className="animate-spin" />
         </div>
       )}
