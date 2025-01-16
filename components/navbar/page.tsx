@@ -13,9 +13,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed z-50 w-screen">
+    <div className="fixed z-50 w-screen flex items-center justify-center">
       {/* Navbar for larger screens */}
-      <div className="hidden md:flex justify-center items-center p-5">
+      <div className="hidden md:flex justify-center w-[80%] items-center p-5">
         <div className="bg-gradient-to-r from-purple_5 via-blue_1 to-purple_3 px-2 py-3 flex justify-between rounded-md backdrop-blur-md shadow-lg z-10 w-full items-center">
           <div className="w-[40%]">
             <a href="/">

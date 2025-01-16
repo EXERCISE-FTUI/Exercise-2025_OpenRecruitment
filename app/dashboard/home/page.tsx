@@ -1,18 +1,21 @@
-"use client";
+'use client';
 
-import CountdownTimer from "@/components/countdownTimer/page";
-import SliderCompany from "@/components/sliderCompany/page";
-
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { supabase } from "@/app/utils/supabase/supabase";
 import { User } from "@supabase/supabase-js";
-
-import { useState } from "react";
+import opregHeader from '@/images/opregHeader.svg';
+import Image from "next/image";
+import CountdownTimer from "@/components/countdownTimer/page"
+import DefineExer from "@/components/homePage/defineExer"
+import OurVision from "@/components/homePage/ourVision"
+import OurMission from "@/components/homePage/ourMission"
+import OurValues from "@/components/homePage/ourValues"
+import HomePageExer from "@/components/homePage/homePage";
 import CarouselLastYear from "@/components/carouselLastyear/Page";
 import CardProject from "@/components/cardProject/Page";
-import HomePageExer from "@/components/homePage/homePage";
-import DefineExer from "@/components/homePage/defineExer";
-import OurMission from "@/components/homePage/ourMission";
-import OurValues from "@/components/homePage/ourValues";
-import OurVision from "@/components/homePage/ourVision";
+import SliderCompany from "@/components/sliderCompany/page";
+
 
 const HomePage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -42,7 +45,7 @@ const HomePage = () => {
   return (
     <div>
       <div className="mt-1">
-        <HomePageExer />  
+        <HomePageExer />
       </div>
       <CountdownTimer />
       <DefineExer />

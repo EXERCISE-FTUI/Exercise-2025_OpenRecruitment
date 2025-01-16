@@ -35,7 +35,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen my-20">
+    <div className="flex flex-col justify-center items-center min-h-screen ">
       <h1 className=" flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
         Login
       </h1>
