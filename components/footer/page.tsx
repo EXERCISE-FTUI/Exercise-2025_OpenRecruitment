@@ -18,7 +18,7 @@ const Footer = () => {
   }
 
   return (
-    <div className="w-full flex flex-col h-auto bg-gradient-to-r from-purple_4 via-blue_1 to-purple_2">
+    <div className="w-full flex flex-col h-auto bg-gradient-to-r from-purple_4 via-blue_1 to-purple_2 font-light">
       {/* Top Section */}
       <div className="w-full h-full flex flex-row m-12">
         {/* Left Section */}
@@ -30,7 +30,7 @@ const Footer = () => {
 
         {/* Right Section */}
         <div className="w-1/2 h-full bg-gradient-to-r from-blue_1 to-purple_2 flex flex-col justify-center mr-12">
-          <div className="flex flex-row items-start gap-4 px-8">
+          <div className="flex flex-row items-start gap-4 px-8 pr-24">
             <Image src={location} alt="location" className="w-6 h-6" />
             <p className="text-md text-white">
               Faculty of Engineering, University of Indonesia, Jl. Prof. DR. Ir R Roosseno, Kukusan, Beji, Depok City, West Java 16425

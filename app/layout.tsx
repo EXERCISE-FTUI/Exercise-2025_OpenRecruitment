@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar/page";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter();
+const inter = Inter({ weight: '700' });
 
 export default function RootLayout({
   children,
