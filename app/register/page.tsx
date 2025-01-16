@@ -1,91 +1,84 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { supabase } from "../utils/supabase/supabase";
-
+import { RegisterForm } from "./_components/RegisterForm";
+import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
 
 const Page = () => {
-    const [registerData, setRegisterData] = useState({ email: "", password: "" });
-    const [step, setStep] = useState(1);
+  const { toast } = useToast();
+  const [registerData, setRegisterData] = useState({ email: "", password: "" });
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [step, setStep] = useState(1);
 
-    async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault(); // Prevent form submission
-        const response = await supabase.auth.signUp({
-          email: registerData.email,
-          password: registerData.password,
-          options: {
-            emailRedirectTo: "http://localhost:3000/login",
+  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault(); // Prevent form submission
+    if (registerData.password !== confirmPassword) {
+      toast({
+        title: "Password do not match!",
+        variant: "destructive",
+        description: "Your passwords do not match. Please try again.",
+      });
+      return;
+    }
 
-          },
-        });
-    
-        if (response.error) {
-          console.error(response.error.message);
-          alert("Registration failed: " + response.error.message);
-        } else {
-          setStep(2);
-        }
-      }
+    const response = await supabase.auth.signUp({
+      email: registerData.email,
+      password: registerData.password,
+      options: {
+        emailRedirectTo: window.location.origin + "/login",
+      },
+    });
+
+    if (response.error) {
+      toast({
+        title: "Registration failed",
+        variant: "destructive",
+        description: response.error.message,
+      });
+    } else {
+      toast({
+        color: "green",
+        title: "Registration successful!",
+        description: "Please check your email for a verification link.",
+      });
+      setStep(2);
+    }
+  }
+
   return (
-    <div className='h-screen flex flex-col justify-center items-center'>
-        { step === 1  ?(
-            <>
-        <form
-        onSubmit={handleRegister}
-        className="mt-4 text-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
-      >
-        <h2 className="text-2xl font-extrabold mb-6 text-center text-black">
-          Sign up
-        </h2>
-        <div className="mb-4">
-          <label
-            htmlFor="register-email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email:
-          </label>
-          <input
-            id="register-email"
-            name="email"
-            type="email"
-            required
-            value={registerData.email}
-            onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
+    <div className="flex flex-col justify-center items-center min-h-screen my-20">
+      {step === 1 ? (
+        <>
+          <h1 className="md:flex text-purple_4 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
+            Register
+          </h1>
+          <div className="flex  mt-5 md:mt-0 w-full items-center justify-center md:justify-evenly">
+            <RegisterForm
+              handleRegister={handleRegister}
+              setRegisterData={setRegisterData}
+              setconfirmPassword={setConfirmPassword}
+              registerData={registerData}
+            />
+            <Image
+              src="/Graphic.svg"
+              alt="logo"
+              width={600}
+              height={600}
+              className="hidden md:flex"
+            />
+          </div>
+        </>
+      ) : (
+        <div>
+          <h1 className="text-4xl text-black">
+            Check your email for a verification link
+          </h1>
         </div>
-        <div className="mb-6">
-          <label
-            htmlFor="register-password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password:
-          </label>
-          <input
-            id="register-password"
-            name="password"
-            type="password"
-            required
-            value={registerData.password}
-            onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Sign up
-        </button>
-      </form>
-      </>
-        ) : (
-            <div>
-                <h1 className="text-4xl">Check your email for a verification link</h1>
-            </div>
-        )}
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

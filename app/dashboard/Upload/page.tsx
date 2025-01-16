@@ -3,378 +3,227 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/app/utils/supabase/supabase";
-import axios from 'axios';
-
-const DIVISIONS = ["SOFTWARE", "HARDWARE", "FNS", "TND", "CMB", "HR", "PM"] as const;
+import axios from "axios";
+import RegistrationForm from "./_components/registration-form";
+import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
+import { Loader } from "lucide-react";
 
 const FormSubmissionWithUpload: React.FC = () => {
-    const router = useRouter();
-    const [step, setStep] = useState(1);
-    const [folderUrl, setFolderUrl] = useState("");
-    const [confirmationChecked, setConfirmationChecked] = useState(false);
-    const [uploadStatus, setUploadStatus] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(true);
-    
-    // Define separate state for each file type
-    const [twibbonFile, setTwibbonFile] = useState<File>();
-    const [cvFile, setCvFile] = useState<File>();
-    const [task1File, setTask1File] = useState<File>();
-    const [task2File, setTask2File] = useState<File>();
+  const router = useRouter();
 
-    const [formData, setFormData] = useState({
-        user_id: "",
-        name: "",
-        major: "",
-        first_choice: DIVISIONS[0],
-        second_choice: DIVISIONS[1],
-    });
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                setIsLoading(true);
-                const { data, error } = await supabase.auth.getUser();
-                
-                if (error) {
-                    console.error("Auth error:", error);
-                    router.replace("/login");
-                    return;
-                }
+  // Define separate state for each file type
 
-                if (!data.user) {
-                    router.replace("/login");
-                    return;
-                }
+  const { toast } = useToast();
 
-                setFormData(prevData => ({
-                    ...prevData,
-                    user_id: data.user.id
-                }));
-            } catch (error) {
-                console.error("Fetch user error:", error);
-                router.replace("/login");
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  const form = useForm({
+    defaultValues: {
+      user_id: "",
+      fullName: "",
+      npm: "",
+      department: "",
+      major: "",
+      force: "",
+      email: "",
+      phone: "",
+      idLine: "",
+      otherContacts: "",
+      division1: "",
+      division2: "",
+    },
+  });
 
-        fetchUser();
-    }, [router]);
+  const { handleSubmit, control, watch } = form;
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+  const onSubmit = () => {
+    setIsLoading(true);
+    handleNext();
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error) {
+          console.error("Auth error:", error);
+          router.replace("/login");
+          return;
+        }
+
+        if (!data.user) {
+          router.replace("/login");
+          return;
+        }
+
+        form.setValue("user_id", data.user.id);
+        // console.log(form.getValues());
+      } catch (error) {
+        console.error("Fetch user error:", error);
+        router.replace("/login");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const handleNext = async () => {
-        if (!formData.user_id) {
-            setUploadStatus("Please wait for user authentication...");
-            return;
+    fetchUser();
+  }, []);
+
+  const handleNext = async () => {
+    try {
+      // Check if the user already exists in the database
+      const { data: existingUser, error: fetchError } = await supabase
+        .from("form_submission")
+        .select("*")
+        .eq("user_id", form.getValues().user_id)
+        .single();
+
+      if (fetchError && fetchError.code !== "PGRST116") {
+        // Check for non-existent user case
+        toast({
+          title: "Error checking user existence!",
+          variant: "destructive",
+          description: fetchError.message,
+        });
+        return;
+      }
+
+      // If the user exists, update their record
+      if (existingUser) {
+        const { error: updateError } = await supabase
+          .from("form_submission")
+          .update({
+            ...form.getValues(),
+            folderUrl: "",
+          })
+          .eq("user_id", form.getValues().user_id);
+
+        if (updateError) {
+          toast({
+            title: "Form update failed!",
+            variant: "destructive",
+            description: updateError.message,
+          });
+          return;
         }
 
-        if (!formData.name || !formData.major) {
-            setUploadStatus("Please fill in all required fields");
-            return;
+        toast({
+          title: "Form updated successfully!",
+          description: "Your information has been updated.",
+        });
+      }
+      // If the user does not exist, insert a new record
+      else {
+        const { error: insertError } = await supabase
+          .from("form_submission")
+          .insert({
+            ...form.getValues(),
+            folderUrl: "",
+          });
+
+        if (insertError) {
+          toast({
+            title: "Form submission failed!",
+            variant: "destructive",
+            description: insertError.message,
+          });
+          return;
         }
 
-        try {
-            setUploadStatus("Submitting form...");
-            const { error: insertError } = await supabase
-                .from("form_submission")
-                .insert({
-                    ...formData,
-                    folderUrl: "",
-                });
-
-            if (insertError) {
-                setUploadStatus(`Initial form submission failed: ${insertError.message}`);
-                return;
-            }
-
-            setStep(2);
-            setUploadStatus("");
-        } catch (error) {
-            console.error(error);
-            setUploadStatus("An unexpected error occurred.");
-        }
-    };
-
-    // File upload handler function
-    const handleFileUpload = async (file: File, fileType: string) => {
-        if (file.type !== "application/pdf") {
-            setUploadStatus("Only PDF files are allowed.");
-            return;
-        }
-
-        try {
-            setUploadStatus(`Uploading ${fileType}...`);
-            const uploadFormData = new FormData();
-            uploadFormData.append("file", file);
-            uploadFormData.append("name", formData.name);
-
-            const response = await axios.post(
-                "https://oprec-exercise-2025-gdrive.vercel.app/upload",
-                uploadFormData,
-                {
-                    headers: { "Content-Type": "multipart/form-data" },
-                }
-            );
-
-            setFolderUrl(response.data.folderUrl);
-            
-            const { error: updateError } = await supabase
-                .from("form_submission")
-                .update({ folderUrl: response.data.folderUrl })
-                .eq("user_id", formData.user_id);
-
-            if (updateError) {
-                throw new Error(`Failed to update folder URL: ${updateError.message}`);
-            }
-
-            setUploadStatus(`${fileType} uploaded successfully`);
-        } catch (error) {
-            console.error(error);
-            setUploadStatus(`Failed to upload ${fileType}. Please try again.`);
-        }
-    };
-
-    // File input change handlers for each type
-    const handleTwibbonChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            setTwibbonFile(file);
-            await handleFileUpload(file, "Twibbon Photo");
-        }
-    };
-
-    const handleCVChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            setCvFile(file);
-            await handleFileUpload(file, "CV");
-        }
-    };
-
-    const handleTask1Change = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            setTask1File(file);
-            await handleFileUpload(file, "Task 1");
-        }
-    };
-
-    const handleTask2Change = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            setTask2File(file);
-            await handleFileUpload(file, "Task 2");
-        }
-    };
-
-    const handleDone = () => {
-        if (confirmationChecked) {
-            router.push("/");
-        } else {
-            setUploadStatus("Please check the confirmation box to submit");
-        }
-    };
-
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="text-center">
-                    <p className="text-gray-600">Loading user data...</p>
-                </div>
-            </div>
-        );
+        toast({
+          title: "Form submitted successfully!",
+          description: "Please upload the required files.",
+        });
+      }
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+      toast({
+        title: "Unexpected error!",
+        variant: "destructive",
+        description: "Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    return (
-        <div className="flex flex-col justify-center items-center h-screen">
-            <div className="max-w-lg mx-auto p-4 space-y-4 bg-white shadow-md rounded-md">
-                <h1 className="text-xl font-bold">Open Recruitment Form</h1>
-                
-                {step === 1 ? (
-                    <>
-                        <div>
-                            <label className="block text-sm font-medium text-blue-700">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Major
-                            </label>
-                            <input
-                                type="text"
-                                name="major"
-                                value={formData.major}
-                                onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                First Choice
-                            </label>
-                            <select
-                                name="first_choice"
-                                value={formData.first_choice}
-                                onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                            >
-                                {DIVISIONS.map((division) => (
-                                    <option key={division} value={division}>
-                                        {division}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">
-                                Second Choice
-                            </label>
-                            <select
-                                name="second_choice"
-                                value={formData.second_choice}
-                                onChange={handleChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                            >
-                                {DIVISIONS.map((division) => (
-                                    <option key={division} value={division}>
-                                        {division}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <button
-                            onClick={handleNext}
-                            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-                            disabled={!formData.user_id}
-                        >
-                            {formData.user_id ? "Next" : "Loading..."}
-                        </button>
-                    </>
-                ) : (
-                    <div className="space-y-6">
-                        {/* Twibbon Photo Upload */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Twibbon Photo
-                            </label>
-                            <input
-                                type="file"
-                                onChange={handleTwibbonChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                                accept="application/pdf"
-                            />
-                            {twibbonFile && (
-                                <p className="text-sm text-green-600 mt-1">
-                                    Uploaded: {twibbonFile.name}
-                                </p>
-                            )}
-                        </div>
+  // File upload handler function
+  const handleFileUpload = async (file: File | null, fileType: string) => {
+    if (!file) {
+      toast({
+        title: `No file selected for ${fileType}`,
+        variant: "destructive",
+        description: "Please select a file and try again.",
+      });
+      return;
+    }
+    setIsLoading(true);
+    // console.log(file, fileType);
+    // if (file.type !== "application/pdf" && !file.type.includes("image")) {
+    //   console.log("Only PDF files are allowed.");
+    //   return;
+    // }
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+      uploadFormData.append("name", watch("fullName"));
 
-                        {/* CV Upload */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Curriculum Vitae (CV)
-                            </label>
-                            <input
-                                type="file"
-                                onChange={handleCVChange}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                                accept="application/pdf"
-                            />
-                            {cvFile && (
-                                <p className="text-sm text-green-600 mt-1">
-                                    Uploaded: {cvFile.name}
-                                </p>
-                            )}
-                        </div>
+      const response = await axios.post(
+        "https://oprec-exercise-2025-gdrive.vercel.app/upload",
+        uploadFormData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
-                        {/* Task 1 Upload */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Division Task 1
-                            </label>
-                            <input
-                                type="file"
-                                onChange={handleTask1Change}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                                accept="application/pdf"
-                            />
-                            {task1File && (
-                                <p className="text-sm text-green-600 mt-1">
-                                    Uploaded: {task1File.name}
-                                </p>
-                            )}
-                        </div>
+      const { error: updateError } = await supabase
+        .from("form_submission")
+        .update({ folderUrl: response.data.folderUrl })
+        .eq("user_id", watch("user_id"));
 
-                        {/* Task 2 Upload */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Division Task 2
-                            </label>
-                            <input
-                                type="file"
-                                onChange={handleTask2Change}
-                                className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
-                                required
-                                accept="application/pdf"
-                            />
-                            {task2File && (
-                                <p className="text-sm text-green-600 mt-1">
-                                    Uploaded: {task2File.name}
-                                </p>
-                            )}
-                        </div>
+      if (updateError) {
+        throw new Error(`Failed to update folder URL: ${updateError.message}`);
+      }
 
-                        <div className="flex items-center space-x-2 mt-6">
-                            <input
-                                type="checkbox"
-                                checked={confirmationChecked}
-                                onChange={(e) => setConfirmationChecked(e.target.checked)}
-                                className="h-4 w-4 text-blue-600"
-                            />
-                            <label className="text-sm text-gray-700">
-                                I confirm that all the information provided is correct
-                            </label>
-                        </div>
+      toast({
+        title: `${fileType} uploaded successfully`,
+        description: "Please proceed to the next step.",
+      });
+      // console.log(`${fileType} uploaded successfully`);
+    } catch (error) {
+      toast({
+        title: `Failed to upload ${fileType}`,
+        variant: "destructive",
+        description: "Please try again.",
+      });
+      console.error(error);
+      // console.log(`Failed to upload ${fileType}. Please try again.`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-                        <button
-                            onClick={handleDone}
-                            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 mt-4"
-                        >
-                            Done
-                        </button>
-
-                        {uploadStatus && (
-                            <p className="text-sm font-medium text-gray-700 mt-4">
-                                {uploadStatus}
-                            </p>
-                        )}
-                    </div>
-                )}
-            </div>
+  return (
+    <>
+      {isLoading === true && (
+        <div className="z-30 top-0 fixed bg-black bg-opacity-25 w-screen bg-opacity-20 flex justify-center items-center h-screen">
+          <Loader className="animate-spin" />
         </div>
-    );
+      )}
+      <div className="mt-24">
+        <RegistrationForm
+          form={form}
+          onSubmit={onSubmit}
+          handleSubmit={handleSubmit}
+          control={control}
+          handleFileUpload={handleFileUpload}
+        />
+      </div>
+    </>
+  );
 };
 
 export default FormSubmissionWithUpload;

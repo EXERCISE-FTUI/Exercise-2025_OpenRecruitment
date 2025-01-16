@@ -1,17 +1,22 @@
-'use client';
+"use client";
 
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { supabase } from "@/app/utils/supabase/supabase";
+import CountdownTimer from "@/components/countdownTimer/page";
+import SliderCompany from "@/components/sliderCompany/page";
+import opregHeader from "@/images/opregHeader.svg";
 import { User } from "@supabase/supabase-js";
-import opregHeader from '@/images/opregHeader.svg';
 import Image from "next/image";
+<<<<<<< HEAD
 import CountdownTimer from "@/components/countdownTimer/page"
 import DefineExer from "./defineExer";
 import OurVision from "./ourVision";
 import OurMission from "./ourMission";
 import OurValues from "./ourValues";
 
+=======
+import { useState } from "react";
+import CarouselLastYear from "@/components/carouselLastyear/Page";
+import CardProject from "@/components/cardProject/Page";
+>>>>>>> 8b3c5edcceae62e93229d8f747f1abfd5d3fb0d1
 const HomePage = () => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -43,10 +48,16 @@ const HomePage = () => {
         <Image src={opregHeader} alt="header" className="w-full pt-10" />
       </div>
       <CountdownTimer />
+<<<<<<< HEAD
       <DefineExer />
       <OurVision />
       <OurMission />
       <OurValues />
+=======
+      <CarouselLastYear/>
+      <CardProject/>
+      <SliderCompany />
+>>>>>>> 8b3c5edcceae62e93229d8f747f1abfd5d3fb0d1
     </div>
   );
 };
