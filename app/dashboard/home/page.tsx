@@ -2,21 +2,18 @@
 
 import CountdownTimer from "@/components/countdownTimer/page";
 import SliderCompany from "@/components/sliderCompany/page";
-import opregHeader from "@/images/opregHeader.svg";
-import { User } from "@supabase/supabase-js";
-import Image from "next/image";
-<<<<<<< HEAD
-import CountdownTimer from "@/components/countdownTimer/page"
-import DefineExer from "./defineExer";
-import OurVision from "./ourVision";
-import OurMission from "./ourMission";
-import OurValues from "./ourValues";
 
-=======
+import { User } from "@supabase/supabase-js";
+
 import { useState } from "react";
 import CarouselLastYear from "@/components/carouselLastyear/Page";
 import CardProject from "@/components/cardProject/Page";
->>>>>>> 8b3c5edcceae62e93229d8f747f1abfd5d3fb0d1
+import HomePageExer from "@/components/homePage/homePage";
+import DefineExer from "@/components/homePage/defineExer";
+import OurMission from "@/components/homePage/ourMission";
+import OurValues from "@/components/homePage/ourValues";
+import OurVision from "@/components/homePage/ourVision";
+
 const HomePage = () => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -45,19 +42,16 @@ const HomePage = () => {
   return (
     <div>
       <div className="mt-1">
-        <Image src={opregHeader} alt="header" className="w-full pt-10" />
+        <HomePageExer />  
       </div>
       <CountdownTimer />
-<<<<<<< HEAD
       <DefineExer />
       <OurVision />
       <OurMission />
       <OurValues />
-=======
       <CarouselLastYear/>
       <CardProject/>
       <SliderCompany />
->>>>>>> 8b3c5edcceae62e93229d8f747f1abfd5d3fb0d1
     </div>
   );
 };
