@@ -14,21 +14,23 @@ export default function Card() {
         effect={"cards"}
         grabCursor={true}
         modules={[EffectCards]}
-        className="mySwiper"
+        className="mySwiper w-[57%] lg:w-[28%] h-[360px] md:h-[460px] py-2"
       >
         {projectDatas.map((project, index) => (
           <SwiperSlide key={index}>
-            <div className="flex flex-col justify-center items-center text-center p-3 gap-4 overflow-hidden font-[inter]">
-              <h1 className="text-3xl mx-1 font-black my-auto">
+            <div className="flex flex-col justify-center items-center text-center p-1 md:p-3 gap-4 overflow-hidden font-[inter]">
+              <h1 className="text-2xl md:text-3xl mx-2 md:mx-1 font-black my-auto">
                 {project.title}
               </h1>
               <Image
                 src={project.img}
                 alt={project.title}
-                height={180}
                 objectFit="cover"
+                className="h-[96px] w-[96px] md:h-[180px] md:w-[180px]"
               />
-              <p className="text-lg mx-4 font-normal">{project.description}</p>
+              <p className="text-sm md:text-lg mx-2 md:mx-4 font-normal">
+                {project.description}
+              </p>
             </div>
           </SwiperSlide>
         ))}
