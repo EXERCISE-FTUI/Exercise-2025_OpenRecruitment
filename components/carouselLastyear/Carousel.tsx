@@ -4,32 +4,35 @@ import {
   EmblaOptionsType,
 } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import Image from "next/image";
+import Image, {StaticImageData} from "next/image";
 import React, { useCallback, useEffect, useRef } from "react";
+import "./carousel.css"
 
-import "./carousel.css";
-import { yearImages } from "./yearImages";
-const TWEEN_FACTOR_BASE = 0.5;
 
-const numberWithinRange = (number: number, min: number, max: number): number =>
-  Math.min(Math.max(number, min), max);
+const TWEEN_FACTOR_BASE = 0.2;
 
 type PropType = {
-  slides: number[];
+  slides: StaticImageData[];
   options?: EmblaOptionsType;
 };
 
-const Carousel: React.FC<PropType> = (props) => {
-  const { options } = props;
+const EmblaCarousel: React.FC<PropType> = (props) => {
+  const { slides, options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const tweenFactor = useRef(0);
-  const yImages = Object.values(yearImages);
+  const tweenNodes = useRef<HTMLElement[]>([]);
+
+  const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
+    tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
+      return slideNode.querySelector(".embla__parallax__layer") as HTMLElement;
+    });
+  }, []);
 
   const setTweenFactor = useCallback((emblaApi: EmblaCarouselType) => {
     tweenFactor.current = TWEEN_FACTOR_BASE * emblaApi.scrollSnapList().length;
   }, []);
 
-  const tweenOpacity = useCallback(
+  const tweenParallax = useCallback(
     (emblaApi: EmblaCarouselType, eventName?: EmblaEventType) => {
       const engine = emblaApi.internalEngine();
       const scrollProgress = emblaApi.scrollProgress();
@@ -60,9 +63,9 @@ const Carousel: React.FC<PropType> = (props) => {
             });
           }
 
-          const tweenValue = 1 - Math.abs(diffToTarget * tweenFactor.current);
-          const opacity = numberWithinRange(tweenValue, 0, 1).toString();
-          emblaApi.slideNodes()[slideIndex].style.opacity = opacity;
+          const translate = diffToTarget * (-1 * tweenFactor.current) * 100;
+          const tweenNode = tweenNodes.current[slideIndex];
+          tweenNode.style.transform = `translateX(${translate}%)`;
         });
       });
     },
@@ -72,32 +75,35 @@ const Carousel: React.FC<PropType> = (props) => {
   useEffect(() => {
     if (!emblaApi) return;
 
+    setTweenNodes(emblaApi);
     setTweenFactor(emblaApi);
-    tweenOpacity(emblaApi);
+    tweenParallax(emblaApi);
+
     emblaApi
+      .on("reInit", setTweenNodes)
       .on("reInit", setTweenFactor)
-      .on("reInit", tweenOpacity)
-      .on("scroll", tweenOpacity)
-      .on("slideFocus", tweenOpacity);
-  }, [emblaApi, tweenOpacity]);
+      .on("reInit", tweenParallax)
+      .on("scroll", tweenParallax)
+      .on("slideFocus", tweenParallax);
+  }, [emblaApi, tweenParallax]);
 
   return (
-    <div className="embla">
+    <div className="embla cursor-grab active:cursor-grabbing">
       <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container items-center">
-          {yImages.map((image, index) => (
-            <div
-              className="embla__slide flex justify-center items-center z-0"
-              key={index}
-            >
-              <Image
-                key={index}
-                src={image}
-                alt={`alm${index + 1}`}
-                width={480}
-                objectFit="cover"
-                className="rounded-md"
-              />
+        <div className="embla__container">
+          {slides.map((image, index) => (
+            <div className="embla__slide" key={index}>
+              <div className="embla__parallax">
+                <div className="embla__parallax__layer">
+                  <Image
+                    src={image}
+                    key={index}
+                    alt={`alm${index + 1}`}
+                    width={480}
+                    className="rounded-[1.8rem]"
+                  />
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -106,4 +112,4 @@ const Carousel: React.FC<PropType> = (props) => {
   );
 };
 
-export default Carousel;
+export default EmblaCarousel;
