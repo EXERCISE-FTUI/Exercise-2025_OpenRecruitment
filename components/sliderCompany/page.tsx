@@ -36,8 +36,9 @@ const sliderCompany = () => {
               key={index}
               src={image}
               alt={`alm${index + 1}`}
-              height={120}
-              width={120}
+              // height={120}
+              // width={120}
+              className="w-20 md:w-32"
             />
           ))}
         </motion.div>
@@ -57,8 +58,9 @@ const sliderCompany = () => {
               key={index}
               src={image}
               alt={`alm${index + 1}`}
-              height={120}
-              width={120}
+              // height={120}
+              // width={120}
+              className="w-20 md:w-32"
             />
           ))}
         </motion.div>
