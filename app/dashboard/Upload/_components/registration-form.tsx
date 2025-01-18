@@ -15,24 +15,66 @@ import {
 import {Control, SubmitHandler, useForm} from "react-hook-form";
 import DocumentTab from "./document-tab";
 import SelectInput from "./SelectInput";
+import {DepartementsList} from "@/utils/information";
 
-const departments = [
-	{value: "dte", label: "DTE"},
-	{value: "other", label: "Other"},
-];
-
-const majors = [
-	{value: "teknik-elektro", label: "Teknik Elektro"},
-	{value: "teknik-komputer", label: "Teknik Komputer"},
-	{value: "teknik-biomedik", label: "Teknik Biomedik"},
-	{value: "other", label: "Other"},
+export const Departements = [
+	{
+		value: "DTSL",
+		key: "dtsl",
+		major: ["Teknik Sipil", "Teknik Lingkungan"],
+	},
+	{
+		value: "DTM",
+		key: "dtm",
+		major: ["Teknik Mesin", "Teknik Perkapalan"],
+	},
+	{
+		value: "DTE",
+		key: "dte",
+		major: ["Teknik Komputer", "Teknik Elektro", "Teknik Biomedik"],
+	},
+	{
+		value: "DTMM",
+		key: "dtmm",
+		major: ["Teknik Metalurgi dan Material"],
+	},
+	{
+		value: "DA",
+		key: "da",
+		major: ["Arsitektur", "Arsitektur Interior"],
+	},
+	{
+		value: "DTK",
+		key: "dtk",
+		major: ["Teknik Kimia", "Teknik Bioproses"],
+	},
+	{
+		value: "DTI",
+		key: "dti",
+		major: ["Teknik Industri"],
+	},
+	{
+		value: "PI",
+		key: "pi",
+		major: [
+			"Teknik Sipil",
+			"Teknik Mesin",
+			"Teknik Elektro",
+			"Teknik Metalurgi dan Material",
+			"Arsitektur",
+			"Teknik Kimia",
+			"Teknik Industri",
+			"Teknik Perkapalan",
+			"Teknik Bioproses",
+			"Teknik Komputer",
+			"Teknik Lingkungan",
+		],
+	},
 ];
 
 const forces = [
 	{value: "2024", label: "2024"},
 	{value: "2023", label: "2023"},
-	{value: "2022", label: "2022"},
-	{value: "other", label: "Other"},
 ];
 
 const divisions = [
@@ -72,6 +114,7 @@ interface RegistrationFormProps {
 	onSubmit: SubmitHandler<FormData>;
 	handleSubmit: (callback: (data: FormData) => void) => () => void;
 	control: Control<FormData>;
+	email: string;
 }
 
 export default function RegistrationForm({
@@ -79,6 +122,7 @@ export default function RegistrationForm({
 	onSubmit,
 	handleSubmit,
 	control,
+	email,
 }: RegistrationFormProps) {
 	const [activeTab, setActiveTab] = React.useState("personal");
 
@@ -91,6 +135,12 @@ export default function RegistrationForm({
 			});
 		}
 	}, [form]);
+
+	React.useEffect(() => {
+		if (email) {
+			form.setValue("email", email);
+		}
+	}, [email, form]);
 
 	const handleTabChange = async (value: string) => {
 		if (value === "document") {
@@ -109,7 +159,7 @@ export default function RegistrationForm({
 	};
 
 	return (
-		<div className="w-full max-w-3xl mx-auto p-4 space-y-6">
+		<div className="w-full max-w-3xl mx-auto p-4 lg:px-4 px-8 space-y-6">
 			<Tabs
 				value={activeTab}
 				onValueChange={handleTabChange}
@@ -118,13 +168,13 @@ export default function RegistrationForm({
 				<TabsList className="grid w-full grid-cols-2">
 					<TabsTrigger
 						value="personal"
-						className="data-[state=active]:bg-[#584B7C] data-[state=active]:text-white"
+						className="data-[state=active]:bg-[#584B7C] data-[state=active]:text-white bg-gray-200"
 					>
 						Personal Information
 					</TabsTrigger>
 					<TabsTrigger
 						value="document"
-						className="data-[state=active]:bg-[#584B7C] data-[state=active]:text-white"
+						className="data-[state=active]:bg-[#584B7C] data-[state=active]:text-white bg-gray-200"
 					>
 						Document
 					</TabsTrigger>
@@ -136,7 +186,7 @@ export default function RegistrationForm({
 							onChange={saveFormDataToLocalStorage}
 							className="space-y-6"
 						>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-2 lg:gap-6">
 								<FormField
 									control={control}
 									name="fullName"
@@ -183,7 +233,6 @@ export default function RegistrationForm({
 									name="department"
 									rules={{required: "Department is required"}}
 									render={({field}) => {
-										console.log("field", field);
 										return (
 											<FormItem>
 												<FormLabel>
@@ -192,7 +241,7 @@ export default function RegistrationForm({
 
 												<SelectInput
 													field={field}
-													options={departments}
+													options={DepartementsList}
 												/>
 												<FormMessage />
 											</FormItem>
@@ -209,7 +258,21 @@ export default function RegistrationForm({
 											<FormLabel>Major</FormLabel>
 											<SelectInput
 												field={field}
-												options={majors}
+												disabled={
+													!form.watch("department")
+												}
+												options={
+													DepartementsList.find(
+														(item) =>
+															item.value ===
+															form.watch(
+																"department"
+															)
+													)?.major.map((major) => ({
+														value: major,
+														label: major,
+													})) || []
+												}
 											/>
 											<FormMessage />
 										</FormItem>
@@ -222,7 +285,7 @@ export default function RegistrationForm({
 									rules={{required: "Force is required"}}
 									render={({field}) => (
 										<FormItem>
-											<FormLabel>Force</FormLabel>
+											<FormLabel></FormLabel>
 											<SelectInput
 												field={field}
 												options={forces}
@@ -235,6 +298,7 @@ export default function RegistrationForm({
 								<FormField
 									control={control}
 									name="email"
+									disabled={true}
 									rules={{
 										required: "Email is required",
 										pattern: {
@@ -371,6 +435,9 @@ export default function RegistrationForm({
 												<SelectInput
 													field={field}
 													options={divisions}
+													otherDivision={form.watch(
+														"division2"
+													)}
 												/>
 												<FormMessage />
 											</FormItem>
@@ -391,6 +458,9 @@ export default function RegistrationForm({
 												<SelectInput
 													field={field}
 													options={divisions}
+													otherDivision={form.watch(
+														"division1"
+													)}
 												/>
 												<FormMessage />
 											</FormItem>

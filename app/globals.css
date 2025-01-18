@@ -85,6 +85,19 @@ body {
 }
 
 /* hide scrollbar */
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
 	display: none;
+}
+
+/* prevent horizontal scroll */
+body {
+	overflow-x: hidden;
+}
+
+* {
+	scroll-behavior: smooth;
+}
+
+html {
+	overflow-x: hidden;
 }

@@ -37,7 +37,7 @@ const Dashboard = async () => {
 	}
 
 	return (
-		<div className="w-full h-auto bg-white_2 mt-12 lg:mt-20">
+		<div className="w-full h-auto bg-white_2 lg:mt-20">
 			<div className="hidden md:flex">
 				<NormalWidthDashboard userData={userData} />
 			</div>

@@ -127,17 +127,15 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
 							height={24}
 							className="absolute left-3"
 						/>
-						<p className="text-gray_3 font-medium">
-							Continue with Google
-						</p>
+						<p className="font-medium">Continue with Google</p>
 					</Button>
 					<div className="text-center text-sm text-gray_3 font-medium">
 						Already have an account?{" "}
 						<Link
-							href="/login"
+							href="/auth/login"
 							className="font-semibold text-black hover:text-[#4a3d7a]"
 						>
-							Register
+							Login
 						</Link>
 					</div>
 				</div>

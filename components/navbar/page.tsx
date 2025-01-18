@@ -23,7 +23,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 		setIsMobileMenuOpen(!isMobileMenuOpen);
 	};
 
-	const navbarText = [
+	const mainPageNavbarText = [
 		{
 			title: "About Us",
 			href: "#aboutUs",
@@ -32,6 +32,13 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 			title: "Divisions",
 			href: "#divisions",
 		},
+		{
+			title: "Download Booklet",
+			href: "#download",
+		},
+	];
+
+	const navbarText = [
 		{
 			title: "Download Booklet",
 			href: "#download",
@@ -60,15 +67,15 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 			}, 1500);
 		};
 
-		window.addEventListener("scroll", handleScroll);
+		window?.addEventListener("scroll", handleScroll);
 		return () => {
-			window.removeEventListener("scroll", handleScroll);
+			window?.removeEventListener("scroll", handleScroll);
 			clearTimeout(scrollTimer);
 		};
 	}, []);
 
 	return (
-		<div className="fixed z-[100] w-full px-8 py-5 lg:py-8 lg:px-16">
+		<div className="fixed z-[100] w-full px-4 py-3 lg:py-8 lg:px-16">
 			{/* Navbar for larger screens */}
 			<motion.div
 				className="hidden lg:flex justify-center w-full items-center"
@@ -102,15 +109,26 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 						</Link>
 					</div>
 					<div className="w-auto flex justify-end space-x-8 items-center">
-						{navbarText.map((item, index) => (
-							<a
-								key={index}
-								href={item.href}
-								className="text-white tracking-wider text-xl hover:underline"
-							>
-								{item.title}
-							</a>
-						))}
+						{window?.location.pathname === "/"
+							? mainPageNavbarText.map((item, index) => (
+									<a
+										key={index}
+										href={item.href}
+										className="text-white tracking-wider text-xl hover:underline"
+									>
+										{item.title}
+									</a>
+							  ))
+							: navbarText.map((item, index) => (
+									<a
+										key={index}
+										href={item.href}
+										className="text-white tracking-wider text-xl hover:underline"
+									>
+										{item.title}
+									</a>
+							  ))}
+
 						{isLoggedIn && (
 							<button
 								className="text-white tracking-wider text-xl hover:underline"
@@ -155,7 +173,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 				}}
 			>
 				<div
-					className={`w-full py-4 flex justify-between items-center px-6 ${
+					className={`w-full py-3 flex justify-between items-center px-6 ${
 						isMobileMenuOpen ? "rounded-t-xl" : "rounded-xl"
 					}`}
 					style={{
@@ -167,7 +185,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 						<Image
 							src='/dteExer.svg'
 							alt="logo"
-							className="h-auto w-16 aspect-contain"
+							className="h-auto aspect-contain"
 						/>
 					</Link>
 
@@ -192,21 +210,50 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 								"linear-gradient(104.19deg, #383F96 -9.53%, #0D2734 24.8%, #2B7696 59.91%, #55457E 74.98%, #504B80 74.98%)",
 						}}
 					>
-						{navbarText.map((item, index) => (
+						{window?.location.pathname === "/"
+							? mainPageNavbarText.map((item, index) => (
+									<Link
+										key={index}
+										href={item.href}
+										className="text-white tracking-wide"
+									>
+										{item.title}
+									</Link>
+							  ))
+							: navbarText.map((item, index) => (
+									<Link
+										key={index}
+										href={item.href}
+										className="text-white tracking-wide"
+									>
+										{item.title}
+									</Link>
+							  ))}
+
+						{!isLoggedIn ? (
 							<Link
-								key={index}
-								href={item.href}
-								className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
+								href="/auth/login"
+								className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
 							>
-								{item.title}
+								Login
 							</Link>
-						))}
-						<Link
-							href="/auth/login"
-							className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
-						>
-							Login
-						</Link>
+						) : (
+							<>
+								<button
+									className="text-white tracking-wider text-start"
+									onClick={handleLogout}
+								>
+									Log Out
+								</button>
+
+								<Link
+									href="/dashboard"
+									className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
+								>
+									Dashboard
+								</Link>
+							</>
+						)}
 					</div>
 				)}
 			</motion.div>

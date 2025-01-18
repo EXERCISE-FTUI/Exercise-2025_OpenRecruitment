@@ -27,23 +27,23 @@ const SmallerWidth = ({
 	];
 
 	return (
-		<div className="w-full flex justify-center">
+		<div className="w-full flex justify-center px-4">
 			<div className="relative w-full">
 				<button
 					onClick={() => setIsOpen(!isOpen)}
-					className={`w-[400px] h-20 relative bg-neutral-50 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] flex items-center justify-between px-6
-            ${isOpen ? "rounded-tl-lg rounded-tr-lg" : "rounded-lg"}`}
+					className={`w-full h-auto py-2 relative bg-neutral-50 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.10)] flex items-center justify-between px-6
+            ${isOpen ? "rounded-t-xl" : "rounded-xl"}`}
 				>
 					<div className="flex items-center gap-4">
 						<div className="w-10 flex items-center justify-center">
 							<Image
 								src={divisionIcons[selectedIcon].src}
 								alt={divisionIcons[selectedIcon].alt}
-								width={32}
-								height={32}
+								width={50}
+								height={50}
 							/>
 						</div>
-						<span className="text-[#55457e] text-lg font-medium font-['Inter']">
+						<span className="text-[#55457e] text-lg font-medium font-['Inter'] truncate">
 							{divisionNames[selectedIcon]}
 						</span>
 					</div>
@@ -65,17 +65,13 @@ const SmallerWidth = ({
 				</button>
 
 				{isOpen && (
-					<div className="absolute w-full bg-white rounded-b-lg shadow-lg p-4">
-						<div className="grid grid-rows-2 grid-cols-5 gap-4">
+					<div className="absolute w-full bg-white rounded-b-lg shadow-lg p-2">
+						<div className="grid grid-rows-2 grid-cols-5 gap-3">
 							{divisionIcons.map((icon, index) => (
 								<div
 									key={index}
-									className={`flex justify-center items-center cursor-pointer rounded-lg transition-all duration-300 ease-in-out
-                    ${
-						selectedIcon === index
-							? "bg-[#55457E] rounded-none"
-							: ""
-					}`}
+									className={`flex rounded-lg justify-center items-center cursor-pointer transition-all duration-300 ease-in-out
+                    ${selectedIcon === index ? "bg-[#55457E]" : ""}`}
 									onClick={() => {
 										setSelectedIcon(index);
 										setIsOpen(false);
@@ -85,15 +81,15 @@ const SmallerWidth = ({
 										<Image
 											src={icon.selectedSrc}
 											alt={icon.alt}
-											width={40}
-											height={40}
+											width={50}
+											height={50}
 										/>
 									) : (
 										<Image
 											src={icon.src}
 											alt={icon.alt}
-											width={32}
-											height={32}
+											width={50}
+											height={50}
 										/>
 									)}
 								</div>
