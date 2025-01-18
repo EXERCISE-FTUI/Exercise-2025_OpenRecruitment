@@ -15,7 +15,7 @@ const NormalWidthDashboard = ({userData}) => {
 
 	return (
 		<div className="w-full max-w-[1440px] mx-auto flex flex-col items-center p-6 gap-6">
-			<div className="text-center text-[#55457e] text-[40px] font-extrabold font-['Inter']">
+			<div className="text-center text-[#55457e] text-[40px] font-extrabold">
 				Dashboard
 			</div>
 

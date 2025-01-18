@@ -28,7 +28,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 	loading,
 }) => {
 	return (
-		<Card className="w-full max-w-[400px] p-1 ">
+		<Card className="w-full max-w-[400px] p-1">
 			<CardHeader>
 				<CardTitle className="text-xl font-semibold">
 					Login to your Account
@@ -49,7 +49,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 							id="email"
 							type="email"
 							placeholder="Enter your email"
-							className="w-full"
+							className="w-full lg:text-md text-sm"
 							onChange={(e) =>
 								setLoginData({
 									...loginData,
@@ -78,7 +78,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 							id="password"
 							type="password"
 							placeholder="Enter your password"
-							className="w-full"
+							className="w-full lg:text-md text-sm"
 							onChange={(e) =>
 								setLoginData({
 									...loginData,
@@ -121,9 +121,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 							height={24}
 							className="absolute left-3"
 						/>
-						<p className="text-gray_3 font-medium">
-							Continue with Google
-						</p>
+						<p className=" font-medium">Continue with Google</p>
 					</Button>
 					<div className="text-center text-sm text-gray_3 font-medium">
 						Don&apos;t have an account?{" "}

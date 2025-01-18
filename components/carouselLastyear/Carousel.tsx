@@ -4,14 +4,15 @@ import {
 	EmblaOptionsType,
 } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import Image, {StaticImageData} from "next/image";
+import Image from "next/image";
 import React, {useCallback, useEffect, useRef} from "react";
 import "./carousel.css";
+import {LastYearCarouselImage} from "./yearImages";
 
 const TWEEN_FACTOR_BASE = 0.2;
 
 type PropType = {
-	slides: StaticImageData[];
+	slides: LastYearCarouselImage[];
 	options?: EmblaOptionsType;
 };
 
@@ -102,11 +103,11 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 							<div className="embla__parallax">
 								<div className="embla__parallax__layer">
 									<Image
-										src={image}
+										src={image.img}
 										key={index}
 										alt={`alm${index + 1}`}
 										width={480}
-										className="rounded-[1.8rem]"
+										className="rounded-lg"
 									/>
 								</div>
 							</div>
