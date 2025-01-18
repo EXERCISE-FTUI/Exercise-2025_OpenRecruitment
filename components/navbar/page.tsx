@@ -1,105 +1,219 @@
 "use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import logoExerLight from '@/images/Exer-light.png';
-import dteExer from '@/images/dteExer.svg';
+import React, {useEffect, useState} from "react";
+import Image from "next/image";
+import logoExerLight from "@/public/Exer-light.png";
+import dteExer from "@/public/dteExer.svg";
+import Link from "next/link";
+import {Menu} from "lucide-react";
+import {useMotionValueEvent, useScroll, motion} from "framer-motion";
+import {handleLogout} from "@/app/hooks/useLogOut";
 
-const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+interface NavbarProps {
+	isLoggedIn: boolean;
+}
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+const Navbar = ({isLoggedIn}: NavbarProps) => {
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isFirstRender, setIsFirstRender] = useState(true);
 
-  return (
-    <div className="fixed z-50 w-screen flex items-center justify-center">
-      {/* Navbar for larger screens */}
-      <div className="hidden md:flex justify-center w-[80%] items-center p-5">
-        <div className="bg-gradient-to-r from-purple_5 via-blue_1 to-purple_3 px-2 py-3 flex justify-between rounded-md backdrop-blur-md shadow-lg z-10 w-full items-center">
-          <div className="w-[40%]">
-            <a href="/">
-            <Image src={logoExerLight} alt="logo" className="w-24 h-8 ml-12" />
-            </a>
-          </div>
-          <div className="w-[40%] flex justify-end mr-10 space-x-8">
-            <a
-              href="/aboutUs"
-              className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
-            >
-              About Us
-            </a>
-            <a
-              href="/divisions"
-              className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
-            >
-              Divisions
-            </a>
-            <a
-              href="/download"
-              className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
-            >
-              Download Booklet
-            </a>
-            <a
-              href="/login"
-              className="text-[#15394A] font-bold bg-white rounded-xl px-4 py-1 hover:bg-indigo-300 hover:rounded-xl"
-            >
-              Login
-            </a>
-          </div>
-        </div>
-      </div>
+	useEffect(() => {
+		setIsFirstRender(false);
+	}, []);
 
-      {/* Navbar for mobile screens */}
-      <div className="md:hidden flex flex-col items-start gap-2.5 px-5 py-3 w-full">
-        <div className="bg-gradient-to-r from-purple_5 via-blue_3 to-purple_4 w-full h-16 rounded-xl flex justify-between items-center px-5">
-          <a href='/'>
-          <Image src={dteExer} alt="logo" className="w-14 h-auto" />
-          </a>
-         
-          <div
-            className="w-10 h-10 bg-[#15394a]/0 rounded flex flex-col justify-center items-center gap-1.5 cursor-pointer"
-            onClick={toggleMobileMenu}
-          >
-            <div className="w-6 h-0.5 bg-white" />
-            <div className="w-6 h-0.5 bg-white" />
-            <div className="w-6 h-0.5 bg-white" />
-          </div>
-        </div>
+	const toggleMobileMenu = () => {
+		setIsMobileMenuOpen(!isMobileMenuOpen);
+	};
 
-        {/* Dropdown menu */}
-        {isMobileMenuOpen && (
-          <div className="w-full bg-gradient-to-r from-purple_5 via-blue_3 to-purple_4 rounded-xl mt-2 shadow-lg flex flex-col space-y-2 px-5 py-3">
-            <a
-              href="/aboutUs"
-              className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
-            >
-              About Us
-            </a>
-            <a
-              href="/divisions"
-              className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
-            >
-              Divisions
-            </a>
-            <a
-              href="/download"
-              className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
-            >
-              Download Booklet
-            </a>
-            <a
-              href="/login"
-              className="text-[#15394A] font-bold bg-white rounded-xl px-4 py-1 hover:bg-indigo-300 hover:rounded-xl"
-            >
-              Login
-            </a>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+	const navbarText = [
+		{
+			title: "About Us",
+			href: "#aboutUs",
+		},
+		{
+			title: "Divisions",
+			href: "#divisions",
+		},
+		{
+			title: "Download Booklet",
+			href: "#download",
+		},
+	];
+
+	const {scrollY} = useScroll();
+	const [isHidden, setHidden] = useState(false);
+
+	useMotionValueEvent(scrollY, "change", (latest) => {
+		const previous = scrollY.getPrevious();
+		if (previous ? latest > previous : false) {
+			setHidden(true);
+		} else {
+			setHidden(false);
+		}
+	});
+
+	useEffect(() => {
+		let scrollTimer: NodeJS.Timeout;
+
+		const handleScroll = () => {
+			clearTimeout(scrollTimer);
+			scrollTimer = setTimeout(() => {
+				setHidden(false);
+			}, 1500);
+		};
+
+		window.addEventListener("scroll", handleScroll);
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+			clearTimeout(scrollTimer);
+		};
+	}, []);
+
+	return (
+		<div className="fixed z-[100] w-full px-8 py-5 lg:py-8 lg:px-16">
+			{/* Navbar for larger screens */}
+			<motion.div
+				className="hidden lg:flex justify-center w-full items-center"
+				initial={{opacity: 0, y: isFirstRender ? -50 : 0}}
+				variants={{
+					visible: {opacity: 1, y: 0},
+					hidden: {opacity: 0, y: "-150%"},
+				}}
+				animate={isHidden ? "hidden" : "visible"}
+				transition={{
+					duration: isFirstRender ? 0.8 : 0.3,
+					ease: isFirstRender ? "easeOut" : "easeInOut",
+					delay: isFirstRender ? 1.5 : 0,
+				}}
+			>
+				<div
+					className="px-16 py-5 h-auto flex justify-between rounded-xl backdrop-blur-md shadow-lg w-full items-center"
+					style={{
+						background:
+							"linear-gradient(89.92deg, #383F96 -30.15%, #15394A 30.04%, #3A698C 66.29%, #55457E 120.87%, #504B80 120.88%)",
+						boxShadow: "0px 1px 12px rgba(0, 0, 0, 0.25)",
+					}}
+				>
+					<div className="w-auto">
+						<Link href="/">
+							<Image
+								src={logoExerLight}
+								alt="logo"
+								className="w-32 aspect-contain"
+							/>
+						</Link>
+					</div>
+					<div className="w-auto flex justify-end space-x-8 items-center">
+						{navbarText.map((item, index) => (
+							<a
+								key={index}
+								href={item.href}
+								className="text-white tracking-wider text-xl hover:underline"
+							>
+								{item.title}
+							</a>
+						))}
+						{isLoggedIn && (
+							<button
+								className="text-white tracking-wider text-xl hover:underline"
+								onClick={handleLogout}
+							>
+								Log Out
+							</button>
+						)}
+
+						{!isLoggedIn ? (
+							<Link
+								href="/auth/login"
+								className="text-[#15394A] text-xl font-bold bg-white rounded-full px-6 tracking-wider py-1 hover:bg-gray-50"
+							>
+								Login
+							</Link>
+						) : (
+							<Link
+								href="/dashboard"
+								className="text-[#15394A] text-xl font-bold bg-white rounded-full px-6 tracking-wider py-1 hover:bg-gray-50"
+							>
+								Dashboard
+							</Link>
+						)}
+					</div>
+				</div>
+			</motion.div>
+
+			{/* Navbar for mobile screens */}
+			<motion.div
+				className="lg:hidden flex flex-col h-auto relative items-start w-full"
+				initial={{opacity: 0, y: isFirstRender ? -50 : 0}}
+				variants={{
+					visible: {opacity: 1, y: 0},
+					hidden: {opacity: 0, y: "-150%"},
+				}}
+				animate={isHidden ? "hidden" : "visible"}
+				transition={{
+					duration: isFirstRender ? 0.8 : 0.3,
+					ease: isFirstRender ? "easeOut" : "easeInOut",
+					delay: isFirstRender ? 1.5 : 0,
+				}}
+			>
+				<div
+					className={`w-full py-4 flex justify-between items-center px-6 ${
+						isMobileMenuOpen ? "rounded-t-xl" : "rounded-xl"
+					}`}
+					style={{
+						background:
+							"linear-gradient(98.41deg, #383F96 -6.59%, #0D2734 33.69%, #2B7696 57.86%, #55457E 94.11%, #504B80 94.11%)",
+					}}
+				>
+					<Link href="/">
+						<Image
+							src={dteExer}
+							alt="logo"
+							className="h-auto w-16 aspect-contain"
+						/>
+					</Link>
+
+					{/* <div
+						className="w-10 h-10 bg-[#15394a]/0 rounded flex flex-col justify-center items-center gap-1.5 cursor-pointer"
+						onClick={toggleMobileMenu}
+					>
+						<div className="w-6 h-0.5 bg-white" />
+						<div className="w-6 h-0.5 bg-white" />
+						<div className="w-6 h-0.5 bg-white" />
+					</div> */}
+
+					<Menu size={40} color="white" onClick={toggleMobileMenu} />
+				</div>
+
+				{/* Dropdown menu */}
+				{isMobileMenuOpen && (
+					<div
+						className="w-full absolute top-[99%] rounded-b-xl shadow-lg flex flex-col space-y-3 px-5 pt-4 pb-8"
+						style={{
+							background:
+								"linear-gradient(104.19deg, #383F96 -9.53%, #0D2734 24.8%, #2B7696 59.91%, #55457E 74.98%, #504B80 74.98%)",
+						}}
+					>
+						{navbarText.map((item, index) => (
+							<Link
+								key={index}
+								href={item.href}
+								className="text-white py-1 px-1 hover:bg-indigo-700 hover:rounded-sm"
+							>
+								{item.title}
+							</Link>
+						))}
+						<Link
+							href="/auth/login"
+							className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
+						>
+							Login
+						</Link>
+					</div>
+				)}
+			</motion.div>
+		</div>
+	);
 };
 
 export default Navbar;
