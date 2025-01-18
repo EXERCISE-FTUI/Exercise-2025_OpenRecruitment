@@ -1,10 +1,10 @@
 import Image from "next/image";
-import timelineSvg from "@/public/timeline.svg";
+
 
 const NormalWidthTimeline = () => {
 	return (
 		<div className="flex justify-center items-center h-[300]px">
-			<Image src={timelineSvg} alt="timeline" />
+			<Image src='/timeline.svg' alt="timeline" />
 		</div>
 	);
 };

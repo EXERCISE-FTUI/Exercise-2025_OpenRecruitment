@@ -4,10 +4,7 @@ import Image from "next/image";
 import { almImages } from "./almImages";
 
 const sliderCompany = () => {
-  const aImages = Object.values(almImages);
-
-  // Duplicate the image array to create a seamless loop
-  const images = [...aImages, ...aImages];
+  const images = [...almImages, ...almImages]; // Duplicate images for seamless loop
 
   return (
     <div className="w-screen overflow-hidden flex flex-col gap-10 my-12">
@@ -36,8 +33,6 @@ const sliderCompany = () => {
               key={index}
               src={image}
               alt={`alm${index + 1}`}
-              // height={120}
-              // width={120}
               className="w-20 md:w-32"
             />
           ))}
@@ -58,8 +53,6 @@ const sliderCompany = () => {
               key={index}
               src={image}
               alt={`alm${index + 1}`}
-              // height={120}
-              // width={120}
               className="w-20 md:w-32"
             />
           ))}

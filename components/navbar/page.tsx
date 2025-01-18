@@ -2,8 +2,6 @@
 
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
-import logoExerLight from "@/public/Exer-light.png";
-import dteExer from "@/public/dteExer.svg";
 import Link from "next/link";
 import {Menu} from "lucide-react";
 import {useMotionValueEvent, useScroll, motion} from "framer-motion";
@@ -97,7 +95,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 					<div className="w-auto">
 						<Link href="/">
 							<Image
-								src={logoExerLight}
+								src='/Exer-light.png'
 								alt="logo"
 								className="w-32 aspect-contain"
 							/>
@@ -167,7 +165,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 				>
 					<Link href="/">
 						<Image
-							src={dteExer}
+							src='/dteExer.svg'
 							alt="logo"
 							className="h-auto w-16 aspect-contain"
 						/>

@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import Exer_Footer from "@/public/Exer-Footer.svg";
 import Image from "next/image";
-import location from "@/public/location.svg";
-import email from "@/public/email.svg";
-import instagramWhite from "@/public/instagramWhite.svg";
-import linkedinWhite from "@/public/linkedinWhite.svg";
 
 const Footer = () => {
 	const handleClickInstagram = () => {
@@ -34,7 +29,7 @@ const Footer = () => {
 				<div className="w-1/2 h-full">
 					<div className="flex flex-col items-center w-[50%] justify-center h-full mt-8">
 						<Image
-							src={Exer_Footer}
+							src='/Exer-Footer.svg'
 							alt="logo"
 							className="w-72 h-36"
 						/>
@@ -45,7 +40,7 @@ const Footer = () => {
 				<div className="w-1/2 h-full flex flex-col justify-center mr-12">
 					<div className="flex flex-row items-start gap-4 px-8 pr-24">
 						<Image
-							src={location}
+							src='/location.svg'
 							alt="location"
 							className="w-6 h-6"
 						/>
@@ -56,7 +51,7 @@ const Footer = () => {
 						</p>
 					</div>
 					<div className="flex flex-row items-start gap-4 px-8 mt-6">
-						<Image src={email} alt="email" className="w-6 h-6" />
+						<Image src='/email.svg' alt="email" className="w-6 h-6" />
 						<p className="text-md text-white">
 							hr@exerciseftui.com
 						</p>
@@ -67,13 +62,13 @@ const Footer = () => {
 						</p>
 						<div className="flex flex-row gap-4">
 							<Image
-								src={instagramWhite}
+								src='/instagramWhite.svg'
 								alt="instagram"
 								className="w-6 h-6"
 								onClick={handleClickInstagram}
 							/>
 							<Image
-								src={linkedinWhite}
+								src='/linkedinWhite.svg'
 								alt="linkedin"
 								className="w-6 h-6"
 								onClick={handleClickLinkedin}
@@ -88,13 +83,13 @@ const Footer = () => {
 				<div className="w-full grid grid-cols-8 gap-2 h-full">
 					<div className="col-span-5 grid grid-rows-2 space-y-4 items-center justify-center h-full">
 						<Image
-							src={Exer_Footer}
+							src='/Exer-Footer.svg'
 							alt="logo"
 							className="w-40 aspect-contain row-span-1"
 						/>
 						<div className="flex row-span-1 gap-2 items-center">
 							<Image
-								src={location}
+								src='/location.svg'
 								alt="location"
 								className="w-6 h-6"
 							/>
@@ -112,13 +107,13 @@ const Footer = () => {
 							</p>
 							<div className="flex flex-row gap-4">
 								<Image
-									src={instagramWhite}
+									src='/instagramWhite.svg'
 									alt="instagram"
 									className="w-8 h-8"
 									onClick={handleClickInstagram}
 								/>
 								<Image
-									src={linkedinWhite}
+									src='/linkedinWhite.svg'
 									alt="linkedin"
 									className="w-8 h-8"
 									onClick={handleClickLinkedin}
@@ -127,7 +122,7 @@ const Footer = () => {
 						</div>
 						<div className="flex row-span-1 gap-2 items-center text-xs">
 							<Image
-								src={email}
+								src='/email.svg'
 								alt="email"
 								className="w-5 h-5"
 							/>
