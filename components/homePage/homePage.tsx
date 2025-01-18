@@ -32,7 +32,7 @@ const HomePageExer = () => {
 	const starDelays = [0.2, 1.5, 0.8, 2.1, 1.2, 0.5, 1.8];
 
 	return (
-		<div className="w-full h-[500px] pb-20">
+		<div className="w-full lg:mt-0 lg:h-[500px] pb-10 lg:pb-20">
 			<div className="w-full h-[130%] flex flex-col justify-center items-center">
 				<h1 className="text-7xl max-md:text-4xl font-black text-blue_3">
 					<motion.span
@@ -62,8 +62,8 @@ const HomePageExer = () => {
 					transition={{delay: 1.5, duration: 2}}
 				>
 					<div className="p-6">
-						<div className="p-5 max-md:p-2 w-full h-auto bg-blue_3 text-white_2">
-							<p className="text-5xl max-md:text-2xl">
+						<div className="px-4 py-2 w-auto h-auto bg-blue_3 text-white_2">
+							<p className="text-5xl max-md:text-2xl text-center">
 								EXERCISE 2025
 							</p>
 						</div>
@@ -72,7 +72,7 @@ const HomePageExer = () => {
 						<Image
 							src={headerExer}
 							alt="ExerFooter"
-							className="w-full h-[100px] z-10"
+							className="w-full h-16 lg:h-[100px] z-10"
 						/>
 						<p className="text-blue_3 text-2xl max-md:text-lg font-extrabold italic">
 							#IntoTheExerverse
