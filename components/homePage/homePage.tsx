@@ -56,7 +56,7 @@ const HomePageExer = () => {
 					transition={{delay: 1.5, duration: 2}}
 				>
 					<div className="p-6">
-						<div className="p-5 max-md:p-2 w-full h-auto bg-blue_3 text-white_2">
+						<div className="p-5 max-md:p-2 flex w-full h-auto bg-blue_3 text-white_2 items-center justify-center rounded-2xl">
 							<p className="text-5xl max-md:text-2xl">
 								EXERCISE 2025
 							</p>

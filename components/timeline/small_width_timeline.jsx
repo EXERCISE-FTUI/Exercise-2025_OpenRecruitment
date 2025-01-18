@@ -1,5 +1,4 @@
 import Image from "next/image";
-import timelineSvg from "@/public/timeline_small.svg";
 
 const SmallWidthTimeline = () => {
 	return (
