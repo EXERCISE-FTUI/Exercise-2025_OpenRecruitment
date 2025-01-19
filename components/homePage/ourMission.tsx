@@ -1,7 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import whitePoly from "@/public/whitePoly.svg";
-import bluePoly from "@/public/bluePoly.svg";
 import {motion} from "framer-motion";
 
 interface BracketCardProps {
@@ -14,7 +12,7 @@ const BracketCard: React.FC<BracketCardProps> = ({number, message, delay}) => {
 	const isOdd = number % 2 !== 0;
 	const bracketColor = isOdd ? "bg-blue_2" : "bg-purple_4";
 	const textColor = isOdd ? "text-white_1" : "text-white_2";
-	const polygonSrc = isOdd ? whitePoly : bluePoly;
+	const polygonSrc = isOdd ? '/whitePoly.svg' : '/bluePoly.svg';
 	const polygonTextColor = isOdd ? "text-blue_2" : "text-white_2";
 	const rotation = isOdd ? "rotate-12" : "rotate-[-12deg]";
 

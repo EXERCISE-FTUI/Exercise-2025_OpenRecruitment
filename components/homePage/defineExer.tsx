@@ -1,5 +1,4 @@
 import React from "react";
-import exerBox1 from "@/public/exerBox-1.svg";
 import {motion} from "framer-motion";
 
 import Image from "next/image";
@@ -20,7 +19,7 @@ const DefineExer = () => {
 			<div className="grid grid-cols-2 w-full overflow-x-auto max-md:grid-cols-1 max-md:justify-center max-md:items-center">
 				<div className="flex flex-col max-md:items-center max-md:justify-center">
 					<Image
-						src={exerBox1}
+						src='/exerBox-1.svg'
 						alt="exerBox1"
 						className="w-[380px] h-40 max-md:w-full max-md:h-32 items-center"
 					/>

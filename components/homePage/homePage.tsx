@@ -1,10 +1,4 @@
 import React from "react";
-import hexagonLeft from "@/public/hexagonLeft.svg";
-import polygonRight from "@/public/polygonRight.svg";
-import star1_topLeft from "@/public/star1_topLeft.svg";
-import star2_middleLeft from "@/public/star2_middleLeft.svg";
-import star3_bottomRight from "@/public/star3_bottomRight.svg";
-import headerExer from "@/public/headerExer.svg";
 import Image from "next/image";
 import {motion} from "framer-motion";
 
@@ -70,9 +64,9 @@ const HomePageExer = () => {
 					</div>
 					<div className="w-full gap-2 text-center">
 						<Image
-							src={headerExer}
-							alt="ExerFooter"
-							className="w-full h-16 lg:h-[100px] z-10"
+							src="/headerExer.svg"
+							alt="headerExer"
+							className="w-full h-[100px] z-10"
 						/>
 						<p className="text-blue_3 text-2xl max-md:text-lg font-extrabold italic">
 							#IntoTheExerverse
@@ -82,7 +76,7 @@ const HomePageExer = () => {
 			</div>
 			{/*Left Section */}
 			<Image
-				src={hexagonLeft}
+				src="/hexagonLeft.svg"
 				alt="hexagonLeft"
 				className="absolute top-20 left-0 size z-0 max-lg:hidden"
 			/>
@@ -91,7 +85,7 @@ const HomePageExer = () => {
 				variants={createFallingStar(starDelays[0])}
 				initial="initial"
 				animate="animate"
-				src={star1_topLeft.src}
+				src="/star1_topLeft.svg"
 				alt="star1_topLeft"
 				className="absolute top-52 left-64 size-16 max-lg:left-14 max-lg:size-10 z-0"
 			/>
@@ -100,7 +94,7 @@ const HomePageExer = () => {
 				variants={createFallingStar(starDelays[2])}
 				initial="initial"
 				animate="animate"
-				src={star2_middleLeft.src}
+				src="/star2_middleLeft.svg"
 				alt="star2_middleLeft"
 				className="absolute top-[340px] left-[380px] size max-lg:left-20 max-lg:size-7 max-lg:rotate-[28deg] z-0"
 			/>
@@ -109,14 +103,14 @@ const HomePageExer = () => {
 				variants={createFallingStar(starDelays[3])}
 				initial="initial"
 				animate="animate"
-				src={star3_bottomRight.src}
+				src="/star3_bottomRight.svg"
 				alt="star3_bottomRight"
 				className="absolute top-0 left-48 size-32 max-lg:left-[-38px] max-lg:size-24 z-0"
 			/>
 
 			{/*Right Section */}
 			<Image
-				src={polygonRight}
+				src="/polygonRight.svg"
 				alt="polygonRight"
 				className="absolute top-44 right-0 size z-0 max-lg:hidden"
 			/>
@@ -125,7 +119,7 @@ const HomePageExer = () => {
 				variants={createFallingStar(starDelays[4])}
 				initial="initial"
 				animate="animate"
-				src={star1_topLeft.src}
+				src="/star1_topLeft.svg"
 				alt="star1_topLeft"
 				className="absolute top-40 right-48 size z-0 max-lg:right-0 max-lg:size-20"
 			/>
@@ -134,7 +128,7 @@ const HomePageExer = () => {
 				variants={createFallingStar(starDelays[5])}
 				initial="initial"
 				animate="animate"
-				src={star2_middleLeft.src}
+				src="/star2_middleLeft.svg"
 				alt="star2_middleLeft"
 				className="absolute top-80 right-[340px] size z-0 max-lg:size-8 max-lg:right-32 max-md:right-16"
 			/>
@@ -143,7 +137,7 @@ const HomePageExer = () => {
 				variants={createFallingStar(starDelays[6])}
 				initial="initial"
 				animate="animate"
-				src={star1_topLeft.src}
+				src="/star1_topLeft.svg"
 				alt="star1_topLeft"
 				className="absolute top-0 right-52 size-12 z-0 max-lg:top-[440px] max-lg:size-6 max-lg:right-8"
 			/>

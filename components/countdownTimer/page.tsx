@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import React, {useState, useEffect} from "react";
-import timer from "@/public/timer.svg";
-import booklet from "@/public/booklet.svg";
+
 import {motion} from "framer-motion";
 
 const CountdownTimer: React.FC = () => {
@@ -109,7 +108,7 @@ const CountdownTimer: React.FC = () => {
 							<div className="flex items-center w-full justify-center">
 								<div className="flex flex-row gap-4">
 									<Image
-										src={timer}
+										src='/timer.svg'
 										alt="timer"
 										className="w-7 h-7"
 									/>
@@ -141,7 +140,7 @@ const CountdownTimer: React.FC = () => {
 							}
 						>
 							<Image
-								src={booklet}
+								src='/booklet.svg'
 								alt="booklet"
 								className="w-7 h-7"
 							/>

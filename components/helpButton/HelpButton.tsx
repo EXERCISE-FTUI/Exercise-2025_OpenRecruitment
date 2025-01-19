@@ -8,7 +8,6 @@ import {
 	useScroll,
 } from "framer-motion";
 import {useEffect, useState} from "react";
-import whatsAppIcon from "@/public/Whatsapp.svg";
 import Image from "next/image";
 import {usePathname} from "next/navigation";
 
@@ -163,7 +162,7 @@ const ContactList = ({name, number}: ContactListProps) => {
 					{number}
 				</p>
 			</div>
-			<Image src={whatsAppIcon} alt="WhatsApp" width={30} height={30} />
+			<Image src='/Whatsapp.svg' alt="WhatsApp" width={30} height={30} />
 		</a>
 	);
 };
