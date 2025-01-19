@@ -21,7 +21,21 @@ export async function POST(req) {
 				{status: 400}
 			);
 
-		const fileBuffer = Buffer.from(await file.arrayBuffer());
+		const fileStream = file.stream();
+		const passThrough = new PassThrough();
+		fileStream.pipeTo(
+			new WritableStream({
+				write(chunk) {
+					passThrough.write(chunk);
+				},
+				close() {
+					passThrough.end();
+				},
+				abort(err) {
+					passThrough.destroy(err);
+				},
+			})
+		);
 
 		const jwtClient = new google.auth.JWT(
 			process.env.CLIENT_EMAIL,
@@ -64,11 +78,7 @@ export async function POST(req) {
 			parents: [folderId],
 		};
 
-		// ✅ Convert Buffer to a proper Node.js Readable stream
-		const bufferStream = new PassThrough();
-		bufferStream.end(fileBuffer);
-
-		const media = {mimeType: file.type, body: bufferStream};
+		const media = {mimeType: file.type, body: passThrough};
 
 		const uploadedFile = await drive.files.create({
 			requestBody: fileMetadata,
@@ -77,12 +87,10 @@ export async function POST(req) {
 			uploadType: "media",
 		});
 
-		if (folderId) {
-			await drive.permissions.create({
-				fileId: folderId,
-				requestBody: {role: "reader", type: "anyone"},
-			});
-		}
+		await drive.permissions.create({
+			fileId: folderId,
+			requestBody: {role: "reader", type: "anyone"},
+		});
 
 		// await drive.permissions.create({
 		// 	fileId: uploadedFile.data.id,

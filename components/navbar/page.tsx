@@ -1,13 +1,19 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import Image from "next/image";
 import logoExerLight from "@/public/Exer-light.png";
 import dteExer from "@/public/dteExer.svg";
 import Link from "next/link";
-import {Menu} from "lucide-react";
-import {useMotionValueEvent, useScroll, motion} from "framer-motion";
+import {Menu, X} from "lucide-react";
+import {
+	useMotionValueEvent,
+	useScroll,
+	motion,
+	AnimatePresence,
+} from "framer-motion";
 import {handleLogout} from "@/app/hooks/useLogOut";
+import {usePathname} from "next/navigation";
 
 interface NavbarProps {
 	isLoggedIn: boolean;
@@ -15,14 +21,36 @@ interface NavbarProps {
 
 const Navbar = ({isLoggedIn}: NavbarProps) => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-	const [isFirstRender, setIsFirstRender] = useState(true);
+	const currentPath = usePathname();
+	const [isFirstRender, setIsFirstRender] = useState(currentPath === "/");
+	const mobileMenuRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		setIsFirstRender(false);
 	}, []);
 
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				mobileMenuRef.current &&
+				!mobileMenuRef.current.contains(event.target as Node)
+			) {
+				setIsMobileMenuOpen(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
 	const toggleMobileMenu = () => {
 		setIsMobileMenuOpen(!isMobileMenuOpen);
+	};
+
+	const handleLinkClick = () => {
+		setIsMobileMenuOpen(false);
 	};
 
 	const mainPageNavbarText = [
@@ -111,7 +139,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 						</Link>
 					</div>
 					<div className="w-auto flex justify-end space-x-8 items-center">
-						{window?.location.pathname === "/"
+						{currentPath === "/"
 							? mainPageNavbarText.map((item, index) => (
 									<a
 										key={index}
@@ -161,6 +189,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 
 			{/* Navbar for mobile screens */}
 			<motion.div
+				ref={mobileMenuRef}
 				className="lg:hidden flex flex-col h-auto relative items-start w-full"
 				initial={{opacity: 0, y: isFirstRender ? -50 : 0}}
 				variants={{
@@ -183,7 +212,7 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 							"linear-gradient(98.41deg, #383F96 -6.59%, #0D2734 33.69%, #2B7696 57.86%, #55457E 94.11%, #504B80 94.11%)",
 					}}
 				>
-					<Link href="/">
+					<Link href="/" onClick={handleLinkClick}>
 						<Image
 							src={dteExer}
 							alt="logo"
@@ -200,64 +229,88 @@ const Navbar = ({isLoggedIn}: NavbarProps) => {
 						<div className="w-6 h-0.5 bg-white" />
 					</div> */}
 
-					<Menu size={40} color="white" onClick={toggleMobileMenu} />
+					{!isMobileMenuOpen ? (
+						<Menu
+							size={40}
+							color="white"
+							onClick={toggleMobileMenu}
+						/>
+					) : (
+						<X size={37} color="white" onClick={toggleMobileMenu} />
+					)}
 				</div>
 
 				{/* Dropdown menu */}
-				{isMobileMenuOpen && (
-					<div
-						className="w-full absolute top-[99%] rounded-b-xl shadow-lg flex flex-col space-y-3 px-5 pt-4 pb-8"
-						style={{
-							background:
-								"linear-gradient(104.19deg, #383F96 -9.53%, #0D2734 24.8%, #2B7696 59.91%, #55457E 74.98%, #504B80 74.98%)",
-						}}
-					>
-						{window?.location.pathname === "/"
-							? mainPageNavbarText.map((item, index) => (
-									<Link
-										key={index}
-										href={item.href}
-										className="text-white tracking-wide"
-									>
-										{item.title}
-									</Link>
-							  ))
-							: navbarText.map((item, index) => (
-									<Link
-										key={index}
-										href={item.href}
-										className="text-white tracking-wide"
-									>
-										{item.title}
-									</Link>
-							  ))}
+				<AnimatePresence>
+					{isMobileMenuOpen && (
+						<motion.div
+							initial={{opacity: 0, scaleY: 0, originY: 0}}
+							animate={{opacity: 1, scaleY: 1, originY: 0}}
+							transition={{
+								duration: 0.2,
+								ease: "easeInOut",
+							}}
+							exit={{opacity: 0, scaleY: 0, originY: 0}}
+							className="w-full absolute top-[99%] rounded-b-xl shadow-lg flex flex-col space-y-3 px-5 pt-4 pb-8"
+							style={{
+								background:
+									"linear-gradient(104.19deg, #383F96 -9.53%, #0D2734 24.8%, #2B7696 59.91%, #55457E 74.98%, #504B80 74.98%)",
+							}}
+						>
+							{currentPath === "/"
+								? mainPageNavbarText.map((item, index) => (
+										<Link
+											key={index}
+											href={item.href}
+											className="text-white tracking-wide"
+											onClick={handleLinkClick}
+										>
+											{item.title}
+										</Link>
+								  ))
+								: navbarText.map((item, index) => (
+										<Link
+											key={index}
+											href={item.href}
+											className="text-white tracking-wide"
+											onClick={handleLinkClick}
+										>
+											{item.title}
+										</Link>
+								  ))}
 
-						{!isLoggedIn ? (
-							<Link
-								href="/auth/login"
-								className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
-							>
-								Login
-							</Link>
-						) : (
-							<>
-								<button
-									className="text-white tracking-wider text-start"
-									onClick={handleLogout}
-								>
-									Log Out
-								</button>
-
+							{!isLoggedIn ? (
 								<Link
-									href="/dashboard"
+									href="/auth/login"
 									className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
+									onClick={handleLinkClick}
 								>
-									Dashboard
+									Login
 								</Link>
-							</>
-						)}
-					</div>
-				)}
+							) : (
+								<>
+									<button
+										className="text-white tracking-wider text-start"
+										onClick={() => {
+											handleLinkClick();
+											handleLogout();
+										}}
+									>
+										Log Out
+									</button>
+
+									<Link
+										href="/dashboard"
+										className="text-[#15394A] w-fit font-bold bg-white rounded-full px-10 shadow-sm shadow-white py-2"
+										onClick={handleLinkClick}
+									>
+										Dashboard
+									</Link>
+								</>
+							)}
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</motion.div>
 		</div>
 	);

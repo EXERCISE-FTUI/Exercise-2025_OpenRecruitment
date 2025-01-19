@@ -12,12 +12,14 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import {signInWithGoogle} from "@/utils/action";
+import {Loader} from "lucide-react";
 
 interface LoginFormProps {
 	handleRegister: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 	setRegisterData: (data: {email: string; password: string}) => void;
 	registerData: {email: string; password: string};
 	setconfirmPassword: React.Dispatch<React.SetStateAction<string>>;
+	loading: boolean;
 }
 
 export const RegisterForm: React.FC<LoginFormProps> = ({
@@ -25,6 +27,7 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
 	setRegisterData,
 	registerData,
 	setconfirmPassword,
+	loading,
 }) => {
 	return (
 		<Card className="w-full max-w-[400px] p-1 ">
@@ -85,7 +88,7 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
 								htmlFor="confirm-password"
 								className="text-sm text-gray-700"
 							>
-								Password
+								Confirm Password
 							</label>
 						</div>
 						<Input
@@ -101,7 +104,11 @@ export const RegisterForm: React.FC<LoginFormProps> = ({
 						type="submit"
 						className="w-full bg-[#584890] hover:bg-[#4a3d7a]"
 					>
-						Register
+						{loading ? (
+							<Loader className="animate-spin" />
+						) : (
+							"Register"
+						)}
 					</Button>
 				</form>
 				<div className="space-y-4 mt-4">

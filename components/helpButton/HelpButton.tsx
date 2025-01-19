@@ -10,8 +10,10 @@ import {
 import {useEffect, useState} from "react";
 import whatsAppIcon from "@/public/Whatsapp.svg";
 import Image from "next/image";
+import {usePathname} from "next/navigation";
 
 const HelpButton = () => {
+	const pathName = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const [isMobile, setIsMobile] = useState(false);
@@ -27,7 +29,7 @@ const HelpButton = () => {
 	}, []);
 
 	const {scrollY} = useScroll();
-	const [isHidden, setHidden] = useState(true);
+	const [isHidden, setHidden] = useState(pathName === "/");
 
 	useMotionValueEvent(scrollY, "change", (latest) => {
 		const previous = scrollY.getPrevious();
@@ -38,112 +40,106 @@ const HelpButton = () => {
 		}
 	});
 
+	useEffect(() => {
+		let scrollTimer: NodeJS.Timeout;
+
+		const handleScroll = () => {
+			clearTimeout(scrollTimer);
+			scrollTimer = setTimeout(() => {
+				setHidden(false);
+			}, 1700);
+		};
+
+		window?.addEventListener("scroll", handleScroll);
+		return () => {
+			window?.removeEventListener("scroll", handleScroll);
+			clearTimeout(scrollTimer);
+		};
+	}, []);
+
 	return (
 		<motion.div
+			className="fixed min-w-16 h-16 cursor-default z-50 bottom-5 rounded-full right-5 shadow"
 			variants={{
 				visible: {opacity: 1, y: 0},
-				hidden: {opacity: 0, y: "-150%"},
+				hidden: {opacity: 0, y: "-100%"},
 			}}
 			animate={isHidden ? "hidden" : "visible"}
 			transition={{
 				ease: "easeInOut",
 				duration: 0.3,
-			}}
-		>
-			<motion.div
-				className="fixed min-w-16 h-16 cursor-default z-50 bottom-5 rounded-full right-5 shadow"
-				transition={{
-					scale: {
-						delay: 0,
-						duration: 1,
-						type: "spring",
-						bounce: 0.75,
-					},
-					borderRadius: {
-						delay: 0,
-						duration: 0,
-					},
+				y: {
 					duration: 0.5,
-					type: "spring",
-					bounce: 0.6,
+				},
+			}}
+			whileHover={{
+				scale: 1.01,
+				borderRadius: "1.5rem",
+			}}
+			onHoverStart={() => !isMobile && setIsOpen(true)}
+			onHoverEnd={() => !isMobile && setIsOpen(false)}
+			onClick={() => setIsOpen(!isOpen)}
+		>
+			<div
+				className={`relative h-full flex p-4 gap-2 items-center justify-start ${
+					isOpen ? "w-auto rounded-3xl" : "w-16 rounded-full"
+				}`}
+				style={{
+					background:
+						"linear-gradient(90deg, #383F96 0%, #55457E 100%)",
+					boxShadow: "0px 1px 12px rgba(250, 250, 250, 0.25)",
 				}}
-				whileHover={{
-					scale: 1.01,
-					// paddingLeft: "0.5rem",
-					// paddingRight: "0.5rem",
-					borderRadius: "1.5rem",
-				}}
-				onHoverStart={() => !isMobile && setIsOpen(true)}
-				onHoverEnd={() => !isMobile && setIsOpen(false)}
-				onClick={() => setIsOpen(!isOpen)}
 			>
-				<div
-					className={`relative h-full flex p-4 gap-2 items-center justify-start ${
-						isOpen ? "w-auto rounded-3xl" : "w-16 rounded-full"
+				<motion.p
+					className={`font-bold text-white tracking-wider text-lg ${
+						isOpen ? "block" : "hidden"
 					}`}
-					style={{
-						background:
-							"linear-gradient(90deg, #383F96 0%, #55457E 100%)",
-						boxShadow: "0px 1px 12px rgba(250, 250, 250, 0.25)",
+					transition={{
+						type: "spring",
+						stiffness: 200,
+						damping: 20,
+						duration: 1,
+						delay: 0.1,
+					}}
+					animate={{
+						x: isOpen ? 0 : 50,
+						opacity: isOpen ? 1 : 0,
 					}}
 				>
-					<motion.p
-						className={`font-bold text-white tracking-wider text-lg ${
-							isOpen ? "block" : "hidden"
-						}`}
-						transition={{
-							type: "spring",
-							stiffness: 200,
-							damping: 20,
-							duration: 1,
-							delay: 0.1,
-						}}
-						animate={{
-							x: isOpen ? 0 : 50,
-							opacity: isOpen ? 1 : 0,
-						}}
-					>
-						Need Help?
-					</motion.p>
-					<AnimatePresence>
-						{isOpen && (
-							<motion.div
-								className="absolute h-auto pb-20 gap-2 flex flex-col p-4 bottom-0 w-full z-[-1] rounded-3xl left-0"
-								initial={{scaleY: 0, opacity: 0}}
-								animate={{
-									scaleY: 1,
-									opacity: 1,
-								}}
-								exit={{
-									scaleY: 0,
-									opacity: 0,
-								}}
-								transition={{
-									type: "spring",
-									stiffness: 200,
-									damping: 20,
-									duration: 0.5, // Smooth exit transition
-								}}
-								style={{
-									transformOrigin: "bottom",
-									background:
-										"linear-gradient(90deg, #383F96 0%, #55457E 100%)",
-								}}
-							>
-								<ContactList
-									name="Tian"
-									number="+6282113383767"
-								/>
-								<ContactList
-									name="Kiara"
-									number="+6281280352747"
-								/>
-							</motion.div>
-						)}
-					</AnimatePresence>
-					<HeadsetIcon className="text-white w-auto h-full" />
-				</div>
-			</motion.div>
+					Need Help?
+				</motion.p>
+				<AnimatePresence>
+					{isOpen && (
+						<motion.div
+							className="absolute h-auto pb-20 gap-2 flex flex-col p-4 bottom-0 w-full z-[-1] rounded-3xl left-0"
+							initial={{scaleY: 0, opacity: 0}}
+							animate={{
+								scaleY: 1,
+								opacity: 1,
+							}}
+							exit={{
+								scaleY: 0,
+								opacity: 0,
+							}}
+							transition={{
+								type: "spring",
+								stiffness: 200,
+								damping: 20,
+								duration: 0.5, // Smooth exit transition
+							}}
+							style={{
+								transformOrigin: "bottom",
+								background:
+									"linear-gradient(90deg, #383F96 0%, #55457E 100%)",
+							}}
+						>
+							<ContactList name="Tian" number="+6282113383767" />
+							<ContactList name="Kiara" number="+6281280352747" />
+						</motion.div>
+					)}
+				</AnimatePresence>
+				<HeadsetIcon className="text-white w-auto h-full" />
+			</div>
 		</motion.div>
 	);
 };

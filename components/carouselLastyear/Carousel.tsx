@@ -102,13 +102,18 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 						<div className="embla__slide" key={index}>
 							<div className="embla__parallax">
 								<div className="embla__parallax__layer">
-									<Image
-										src={image.img}
-										key={index}
-										alt={`alm${index + 1}`}
-										width={480}
-										className="rounded-lg"
-									/>
+									<div className="w-full h-full bg-black relative">
+										<Image
+											src={image.img}
+											key={index}
+											alt={`alm${index + 1}`}
+											width={500}
+											className="rounded-lg h-full object-cover "
+										/>
+										<p className="bg-red-500 absolute z-[100]">
+											{image.title} tes
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>

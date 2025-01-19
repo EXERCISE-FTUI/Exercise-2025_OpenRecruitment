@@ -12,10 +12,24 @@ export async function GET(request: NextRequest) {
 	if (token_hash && type) {
 		const supabase = await createClient();
 
-		const {error} = await supabase.auth.verifyOtp({
+		const {data: auth, error} = await supabase.auth.verifyOtp({
 			type,
 			token_hash,
 		});
+
+		console.log(auth, error);
+
+		const {error: insertError} = await (await supabase)
+			.from("users")
+			.insert({
+				email: auth.user?.email,
+				user_id: auth.user?.id,
+			});
+
+		if (insertError) {
+			redirect("/register");
+		}
+
 		if (!error) {
 			redirect("/dashboard");
 		}

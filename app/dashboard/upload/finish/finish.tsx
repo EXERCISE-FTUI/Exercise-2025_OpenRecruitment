@@ -7,7 +7,7 @@ import Link from "next/link";
 import React from "react";
 import Confetti from "react-confetti";
 
-function page() {
+function FinishPage() {
 	return (
 		<div className="flex flex-col items-center w-full justify-center text-center min-h-screen space-y-4 ">
 			<Confetti
@@ -60,4 +60,4 @@ function page() {
 	);
 }
 
-export default page;
+export default FinishPage;

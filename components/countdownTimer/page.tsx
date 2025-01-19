@@ -48,7 +48,7 @@ const CountdownTimer: React.FC = () => {
 				transition={{duration: 1, delay: 1.5}}
 			>
 				<div
-					className="absolute w-full h-1/2 bg-black z-0"
+					className="absolute w-full h-1/2"
 					style={{
 						background: "linear-gradient(0deg, #9D98B3, #9D98B3)",
 						filter: "blur(200px)",
@@ -66,7 +66,7 @@ const CountdownTimer: React.FC = () => {
 									Days
 								</div>
 								<div className="w-20 lg:w-24 h-20 lg:h-24 bg-blue_3 rounded-md flex items-center justify-center max-md:size-16">
-									<span className="text-white text-5xl max-md:text-3xl font-normal">
+									<span className="text-white text-5xl max-md:text-3xl font-bold">
 										{timeLeft.days}
 									</span>
 								</div>
@@ -80,7 +80,7 @@ const CountdownTimer: React.FC = () => {
 									Hours
 								</div>
 								<div className="w-20 lg:w-24 h-20 lg:h-24 bg-blue_3 rounded-md flex items-center justify-center max-md:size-16">
-									<span className="text-white text-5xl max-md:text-3xl font-normal">
+									<span className="text-white text-5xl max-md:text-3xl font-bold">
 										{timeLeft.hours}
 									</span>
 								</div>
@@ -94,7 +94,7 @@ const CountdownTimer: React.FC = () => {
 									Minutes
 								</div>
 								<div className="w-20 lg:w-24 h-20 lg:h-24 bg-blue_3 rounded-md flex items-center justify-center max-md:size-16">
-									<span className="text-white text-5xl max-md:text-3xl font-normal">
+									<span className="text-white text-5xl max-md:text-3xl font-bold">
 										{timeLeft.minutes}
 									</span>
 								</div>
@@ -132,7 +132,7 @@ const CountdownTimer: React.FC = () => {
 					></div>
 
 					{/* Content Container */}
-					<div className="flex justify-center items-center w-full px-20 z-[5] lg:mt-20">
+					<div className="flex justify-center items-center w-full px-20 z-[10] lg:mt-20">
 						{/* Booklet Button */}
 						<button
 							className="w-full flex items-center gap-3 justify-center px-16 py-3 rounded-xl border-2 border-blue-900 bg-transparent shadow-lg"

@@ -19,15 +19,18 @@ const Page = () => {
 	const [registerData, setRegisterData] = useState({email: "", password: ""});
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [step, setStep] = useState(1);
+	const [loading, setLoading] = useState(false);
 
 	async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault(); // Prevent form submission
+		setLoading(true);
 		if (registerData.password !== confirmPassword) {
 			toast({
 				title: "Password do not match!",
 				variant: "destructive",
 				description: "Your passwords do not match. Please try again.",
 			});
+			setLoading(false);
 			return;
 		}
 
@@ -65,6 +68,7 @@ const Page = () => {
 			});
 			setStep(2);
 		}
+		setLoading(false);
 	}
 
 	return (
@@ -81,6 +85,7 @@ const Page = () => {
 								setRegisterData={setRegisterData}
 								setconfirmPassword={setConfirmPassword}
 								registerData={registerData}
+								loading={loading}
 							/>
 						</div>
 						<div className="w-full col-span-1 items-center justify-center flex">
